@@ -117,7 +117,7 @@ export const userRouter = createTRPCRouter({
         .input(
             z.object({
                 query: z.string(),
-                languages: z.array(z.string()).optional(),
+                languages: z.string().optional(),
                 take: z.number().min(1).max(50).default(10),
                 skip: z.number().default(0),
             }),
@@ -129,15 +129,11 @@ export const userRouter = createTRPCRouter({
                         { name: { contains: input.query, mode: "insensitive" } },
                         { email: { contains: input.query, mode: "insensitive" } },
                     ],
-                    ...(input.languages && input.languages.length > 0
-                        ? {
-                              UsersLanguage: {
-                                  some: {
-                                      language: { in: input.languages },
-                                  },
-                              },
-                          }
-                        : {}),
+                    UsersLanguage: {
+                        some: {
+                            language: input.languages
+                        },
+                    },
                     // Exclude current user
                     NOT: {
                         id: ctx.session.user.id,
