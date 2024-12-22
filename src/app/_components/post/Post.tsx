@@ -28,7 +28,10 @@ interface PostProps {
     commentCount: number;
     userVote?: "up" | "down" | null;
     isBookmarked?: boolean;
-    
+    onVote: (postId: string, voteType: "up" | "down") => void;
+    onBookmark: (postId: string) => void;
+    onShare: (postId: string) => void;
+    onComment: (postId: string) => void;
 }
 
 export default function Post({
@@ -42,7 +45,10 @@ export default function Post({
     commentCount,
     userVote,
     isBookmarked = false,
- 
+    onVote,
+    onBookmark,
+    onShare,
+    onComment,
 }: PostProps) {
     const [isExpanded, setIsExpanded] = useState(false);
     const voteScore = upvotes - downvotes;
@@ -60,9 +66,9 @@ export default function Post({
 
     const handleVote = (type: "up" | "down") => {
         if (userVote === type) {
-            
+            onVote(id, type); // Remove vote
         } else {
-            
+            onVote(id, type); // Add or change vote
         }
     };
 
@@ -101,9 +107,11 @@ export default function Post({
             </div>
 
             {/* Post Content */}
-            <Link href={`/posts/${id}`} className="block mb-4">
+            <Link href={`/post/${id}`} className="block mb-4">
                 <h2 className="text-xl font-semibold text-gray-900 mb-2">{title}</h2>
-                <div className={`text-gray-700 ${!isExpanded && "line-clamp-3"}`}>{content}</div>
+                <div className={`text-gray-700 ${!isExpanded && "line-clamp-3"}`}>
+                    {content}
+                </div>
                 {content.length > 150 && !isExpanded && (
                     <button
                         onClick={(e) => {
@@ -146,7 +154,7 @@ export default function Post({
 
                 {/* Comments */}
                 <button
-                    onClick={console.log}
+                    onClick={() => onComment(id)}
                     className="flex items-center space-x-2 text-gray-500 hover:text-gray-700"
                 >
                     <MessageSquare size={20} />
@@ -155,7 +163,8 @@ export default function Post({
 
                 {/* Share */}
                 <button
-onClick={console.log}                    className="flex items-center space-x-2 text-gray-500 hover:text-gray-700"
+                    onClick={() => onShare(id)}
+                    className="flex items-center space-x-2 text-gray-500 hover:text-gray-700"
                 >
                     <Share2 size={20} />
                     <span>Share</span>
@@ -163,7 +172,8 @@ onClick={console.log}                    className="flex items-center space-x-2 
 
                 {/* Bookmark */}
                 <button
-onClick={console.log}                    className={`flex items-center space-x-2 ${
+                    onClick={() => onBookmark(id)}
+                    className={`flex items-center space-x-2 ${
                         isBookmarked ? "text-yellow-600" : "text-gray-500 hover:text-gray-700"
                     }`}
                 >
@@ -173,4 +183,4 @@ onClick={console.log}                    className={`flex items-center space-x-2
             </div>
         </div>
     );
-}
+} 

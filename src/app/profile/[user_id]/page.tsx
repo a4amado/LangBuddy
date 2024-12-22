@@ -167,25 +167,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ user_i
                         </div>
                         <div className="mb-8">
                             <h2 className="text-lg font-semibold mb-4">Latest Posts:</h2>
-                            {user.posts.map((post) => (
-                                <Post
-                                    key={post.id}
-                                    author={{
-                                        id: post?.createdBy?.id || "deleted",
-                                        image: post?.createdBy?.image || "deleted",
-                                        name: post?.createdBy?.name || "delete",
-                                    }}
-                                    commentCount={0}
-                                    createdAt={post.createdAt}
-                                    content={post.content}
-                                    title={post.title}
-                                    id={post.id}
-                                    downvotes={0}
-                                    upvotes={0}
-                                    
-                                    userVote={"down"}
-                                />
-                            ))}
+                           
                         </div>
                     </div>
                 </div>
