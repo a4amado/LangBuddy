@@ -31,7 +31,7 @@ export default function EditPost() {
 
     const onFinish = (values: { title: string; content: string }) => {
         editPost.mutate({
-            postId: params.postId,
+            postId: postId,
             ...values,
         });
     };
