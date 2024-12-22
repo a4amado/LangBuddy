@@ -1,16 +1,17 @@
 "use client";
 
 import { Button, Form, Input } from "antd";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { api } from "~/trpc/react";
 import { useEffect } from "react";
 import PageWrapper from "~/app/_components/page-wrapper";
 
-export default function EditPost({ params }: { params: { postId: string } }) {
+export default function EditPost() {
     const router = useRouter();
     const [form] = Form.useForm();
+    const { postId } = useParams<{ postId: string }>();
 
-    const { data: post, isLoading } = api.post.view.useQuery({ postId: params.postId });
+    const { data: post, isLoading } = api.post.view.useQuery({ postId: postId });
 
     const editPost = api.post.edit.useMutation({
         onSuccess: () => {
