@@ -6,6 +6,7 @@ import { messageRouter } from "./routers/message";
 import { chatMemberRouter } from "./routers/chatMember";
 import { onBoardingRouter } from "./routers/onboarding";
 import { latestSeenRouter } from "./routers/latest-seen";
+import { postRoute } from "./routers/post";
 
 export const appRouter = createTRPCRouter({
     chat: chatRouter,
@@ -15,6 +16,7 @@ export const appRouter = createTRPCRouter({
     chatMember: chatMemberRouter,
     boarding: onBoardingRouter,
     seen: latestSeenRouter,
+    post: postRoute,
 });
 
 // export type definition of API

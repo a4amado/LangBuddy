@@ -32,12 +32,13 @@ declare module "next-auth" {
  *
  * @see https://next-auth.js.org/configuration/options
  */
-export const authConfig = {
+export const authConfig: NextAuthConfig = {
     providers: [
         GOOGLE({
             clientId: env.AUTH_GOOGLE_ID,
             clientSecret: env.AUTH_GOOGLE_SECRET,
         }),
+
         /**
          * ...add more providers here.
          *

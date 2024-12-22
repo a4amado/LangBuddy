@@ -4,7 +4,7 @@ import { PropsWithChildren, useState } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Menu, X, Home, MessageCircle, Globe, LogOut, User } from "lucide-react";
+import { Menu, X, Home, MessageCircle, Globe, LogOut, User, GlobeIcon } from "lucide-react";
 import { Avatar, Button, Dropdown, Spin } from "antd";
 import type { MenuProps } from "antd";
 
@@ -40,6 +40,12 @@ export default function PageWrapper({ children }: PropsWithChildren) {
             label: "Chat",
             icon: <MessageCircle size={20} />,
             href: "/chat",
+        },
+        {
+            key: "explore",
+            label: "Explore",
+            icon: <GlobeIcon size={20} />,
+            href: "/explore",
         },
     ];
 
