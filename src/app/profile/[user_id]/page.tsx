@@ -14,9 +14,7 @@ import dynamic from "next/dynamic";
 import PageWrapper from "~/app/_components/page-wrapper";
 
 // import Post from "~/app/_components/post/Post";
-const Post = dynamic(() => import("~/app/_components/post/Post"),  {
-    loading:() =>  <LoaderCircle />
-})
+
 
 const DynamicHeader = dynamic(() => import("../../_components/start-chat"), {
     loading: () => <p>Loading...</p>,
