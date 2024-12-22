@@ -15,8 +15,8 @@ import { useRouter } from "next/navigation";
 export default function HomePage() {
     const { data: session } = useSession();
     const [searchQuery, setSearchQuery] = useState("");
-    const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
-    const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+    const [selectedLanguages, setSelectedLanguages] = useState<string>("");
+    const [selectedCountry, setSelectedCountry] = useState<string>("");
 
     // Get current user's languages
     const { data: currentUser } = api.user.me.useQuery();
@@ -141,8 +141,8 @@ const router = useRouter()
                                 icon={<Filter size={20} />}
                                 onClick={() => {
                                     setSearchQuery("");
-                                    setSelectedLanguages([]);
-                                    setSelectedCountry(null);
+                                    setSelectedLanguages("");
+                                    setSelectedCountry("");
                                 }}
                                 className="w-full"
                             >
