@@ -9,6 +9,9 @@ export default function ChatLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    return <PageWrapper>
-    <Provider store={store}>{children}</Provider></PageWrapper>
+    return (
+        <PageWrapper>
+            <Provider store={store}>{children}</Provider>
+        </PageWrapper>
+    );
 }

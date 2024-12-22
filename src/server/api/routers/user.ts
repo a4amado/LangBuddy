@@ -131,7 +131,7 @@ export const userRouter = createTRPCRouter({
                     ],
                     UsersLanguage: {
                         some: {
-                            language: input.languages
+                            language: input.languages,
                         },
                     },
                     // Exclude current user
@@ -181,7 +181,7 @@ export const userRouter = createTRPCRouter({
         const blocked = await ctx.db.blocked.findMany({
             where: {
                 user_1_id: ctx.session.user.id,
-            }
+            },
         });
 
         return blocked;

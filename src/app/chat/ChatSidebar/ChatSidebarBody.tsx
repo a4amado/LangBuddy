@@ -7,12 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState, switchChat } from "../ChatState/store";
 import { useSession } from "next-auth/react";
 
- 
-
 export const ChatSidebarBody: React.FC = () => {
-
     const chats = useSelector<RootState>((state) => state.chats) as RootState["chats"];
-    
+
     const state = useSelector<RootState>((state) => state.state) as RootState["state"];
 
     if (state == "loading") {
@@ -24,11 +21,13 @@ export const ChatSidebarBody: React.FC = () => {
     }
 
     return (
-        <div className="p-4">
+        <>
             {chats.map((chat, idx) => (
-                <ChatSidebarBodyItem key={chat.id} id={chat.id} idx={idx} />
+                <>
+                    <ChatSidebarBodyItem key={chat.id} id={chat.id} idx={idx} />
+                </>
             ))}
-        </div>
+        </>
     );
 };
 

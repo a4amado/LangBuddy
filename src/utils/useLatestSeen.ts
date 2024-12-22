@@ -1,14 +1,13 @@
 import { useSession } from "next-auth/react";
-import { useEffect, } from "react";
+import { useEffect } from "react";
 import { api } from "~/trpc/react";
 
 export default function useLatestSeen() {
     const session = useSession();
     const seen = api.seen.now.useMutation();
-    
 
     useEffect(() => {
-        if (session.status != "authenticated") return
+        if (session.status != "authenticated") return;
         // First call immediately
         seen.mutate();
 

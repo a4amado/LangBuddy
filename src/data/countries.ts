@@ -387,7 +387,7 @@ export const countryCodes = [
     "ZW",
 ];
 
-export const countryNameToCode: Record<string, string>= {
+export const countryNameToCode: Record<string, string> = {
     Afghanistan: "AF",
     Albania: "AL",
     Algeria: "DZ",

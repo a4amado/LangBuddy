@@ -9,7 +9,6 @@ import { UserCircle, Globe, Languages, Heart } from "lucide-react";
 import Flag from "react-world-flags";
 import { useSession } from "next-auth/react";
 
-
 const options = languageCodes.map((language: string) => ({
     label: (
         <div className="flex items-center space-x-2">

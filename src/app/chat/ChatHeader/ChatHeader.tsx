@@ -1,6 +1,5 @@
 "use client";
 
-
 interface ChatHeaderProps {
     chatId: string;
     onSettingsClick?: () => void;

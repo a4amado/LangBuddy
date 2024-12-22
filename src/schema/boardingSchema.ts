@@ -1,5 +1,3 @@
-
-
 import * as yup from "yup";
 import { countryCodes } from "~/data/countries";
 import { languageCodes } from "~/data/languages";
@@ -18,7 +16,7 @@ export const boardingSchema = yup.object().shape({
                 .notOneOf([yup.ref("mother")]),
         )
         .nullable()
-        
+
         .transform((value) => value || []) // Transform null/undefined to empty array
         .default([]),
     country: yup

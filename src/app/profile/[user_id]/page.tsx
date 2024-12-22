@@ -39,102 +39,114 @@ export default async function ProfilePage({ params }: { params: Promise<{ user_i
 
     return (
         <PageWrapper>
-        <div className="min-h-screen bg-gray-100 p-4 md:p-8">
-            <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
-                {/* Profile Header */}
-                <div className="relative">
-                    <div className="h-32 bg-gradient-to-r from-blue-500 to-purple-500"></div>
-                    <div className="absolute -bottom-16 left-1/2 -translate-x-1/2">
-                        <img
-                            src={user?.image?.replace("s96-c", "s384-c") ?? ""}
-                            alt={user?.name ?? ""}
-                            className="w-32 h-32 rounded-full border-4 border-white shadow-lg"
-                        />
-                    </div>
-                </div>
-
-                {/* Profile Content */}
-                <div className="pt-20 px-4 md:px-8 pb-8">
-                    {/* Name and Username */}
-                    <div className="text-center mb-8">
-                        <h1 className="text-2xl font-bold text-gray-800">{user?.name}</h1>
-                        <DynamicHeader user_id={user_id} />
+            <div className="h-full overflow-x-auto bg-gray-100 p-4 md:p-8">
+                <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+                    {/* Profile Header */}
+                    <div className="relative">
+                        <div className="h-32 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+                        <div className="absolute -bottom-16 left-1/2 -translate-x-1/2">
+                            <img
+                                src={user?.image?.replace("s96-c", "s384-c") ?? ""}
+                                alt={user?.name ?? ""}
+                                className="w-32 h-32 rounded-full border-4 border-white shadow-lg"
+                            />
+                        </div>
                     </div>
 
-                    {/* Info Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                        <div className="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                            <Globe className="w-5 h-5 text-blue-500 mr-3" />
-                            <div>
-                                <p className="text-sm text-gray-500">From: 📍</p>
-                                <p className="flex font-medium">
-                                    <Flag code={user?.country ?? ""} width={30} className="m-2" />
-                                    {countryCodeToName[user?.country?.toUpperCase() ?? ""]}
-                                </p>
+                    {/* Profile Content */}
+                    <div className="pt-20 px-4 md:px-8 pb-8">
+                        {/* Name and Username */}
+                        <div className="text-center mb-8">
+                            <h1 className="text-2xl font-bold text-gray-800">{user?.name}</h1>
+                            <DynamicHeader user_id={user_id} />
+                        </div>
+
+                        {/* Info Grid */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                            <div className="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                <Globe className="w-5 h-5 text-blue-500 mr-3" />
+                                <div>
+                                    <p className="text-sm text-gray-500">From: 📍</p>
+                                    <p className="flex font-medium">
+                                        <Flag
+                                            code={user?.country ?? ""}
+                                            width={30}
+                                            className="m-2"
+                                        />
+                                        {countryCodeToName[user?.country?.toUpperCase() ?? ""]}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                <Languages className="w-5 h-5 text-blue-500 mr-3" />
+                                <div>
+                                    <p className="text-sm text-gray-500">Native Language</p>
+                                    <p className="font-medium">{codeToLanguage[native ?? ""]}</p>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                            <Languages className="w-5 h-5 text-blue-500 mr-3" />
-                            <div>
-                                <p className="text-sm text-gray-500">Native Language</p>
-                                <p className="font-medium">{codeToLanguage[native ?? ""]}</p>
+                        {/* Learning Languages */}
+                        <div className="mb-8">
+                            <div className="flex items-center mb-4">
+                                <Book className="w-5 h-5 text-blue-500 mr-2" />
+                                <h2 className="text-lg font-semibold">Learning</h2>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                                {user?.UsersLanguage.filter((e) => e.rank != "mother").map(
+                                    (lang) => (
+                                        <span
+                                            key={lang.language}
+                                            className=" flex px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm hover:bg-blue-200 transition-colors"
+                                        >
+                                            {" "}
+                                            <Flag
+                                                code={languageToCountry[lang.language]}
+                                                width={20}
+                                                className="m-1"
+                                            />{" "}
+                                            {codeToLanguage[lang.language]} (
+                                            {
+                                                countryCodeToName[
+                                                    languageToCountry[lang.language] ?? ""
+                                                ]
+                                            }
+                                            )
+                                        </span>
+                                    ),
+                                )}
                             </div>
                         </div>
-                    </div>
 
-                    {/* Learning Languages */}
-                    <div className="mb-8">
-                        <div className="flex items-center mb-4">
-                            <Book className="w-5 h-5 text-blue-500 mr-2" />
-                            <h2 className="text-lg font-semibold">Learning</h2>
+                        {/* Bio */}
+                        <div className="mb-8">
+                            <h2 className="text-lg font-semibold mb-4">Bio</h2>
+                            <p className="text-gray-600 leading-relaxed bg-gray-50 p-4 rounded-lg">
+                                {user?.Profile?.bio}
+                            </p>
                         </div>
-                        <div className="flex flex-wrap gap-2">
-                            {user?.UsersLanguage.filter((e) => e.rank != "mother").map((lang) => (
-                                <span
-                                    key={lang.language}
-                                    className=" flex px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm hover:bg-blue-200 transition-colors"
-                                >
-                                    {" "}
-                                    <Flag
-                                        code={languageToCountry[lang.language]}
-                                        width={20}
-                                        className="m-1"
-                                    />{" "}
-                                    {codeToLanguage[lang.language]} (
-                                    {countryCodeToName[languageToCountry[lang.language] ?? ""]})
-                                </span>
-                            ))}
-                        </div>
-                    </div>
 
-                    {/* Bio */}
-                    <div className="mb-8">
-                        <h2 className="text-lg font-semibold mb-4">Bio</h2>
-                        <p className="text-gray-600 leading-relaxed bg-gray-50 p-4 rounded-lg">
-                            {user?.Profile?.bio}
-                        </p>
-                    </div>
-
-                    {/* Hobbies */}
-                    <div>
-                        <div className="flex items-center mb-4">
-                            <Heart className="w-5 h-5 text-blue-500 mr-2" />
-                            <h2 className="text-lg font-semibold">Hobbies</h2>
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                            {user?.Profile?.hobbies.split(",").map((hobby) => (
-                                <span
-                                    key={hobby}
-                                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors"
-                                >
-                                    {hobby}
-                                </span>
-                            ))}
+                        {/* Hobbies */}
+                        <div>
+                            <div className="flex items-center mb-4">
+                                <Heart className="w-5 h-5 text-blue-500 mr-2" />
+                                <h2 className="text-lg font-semibold">Hobbies</h2>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                                {user?.Profile?.hobbies.split(",").map((hobby) => (
+                                    <span
+                                        key={hobby}
+                                        className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors"
+                                    >
+                                        {hobby}
+                                    </span>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div></PageWrapper>
+        </PageWrapper>
     );
 }

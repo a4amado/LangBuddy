@@ -1,4 +1,3 @@
-
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 import { boardingSchema } from "~/schema/boardingSchema";

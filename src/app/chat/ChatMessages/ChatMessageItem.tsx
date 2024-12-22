@@ -5,7 +5,6 @@ import { useSession } from "next-auth/react";
 import { RootState } from "../ChatState/store";
 import { useSelector } from "react-redux";
 import { Avatar } from "antd";
- 
 
 interface ChatMessageItemProps {
     idx: number;

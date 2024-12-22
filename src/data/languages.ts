@@ -273,7 +273,7 @@ export const languageCodes: string[] = [
 ];
 
 // Object mapping language codes to names
-export const codeToLanguage:Record<string, string> = {
+export const codeToLanguage: Record<string, string> = {
     af: "Afrikaans",
     sq: "Albanian",
     am: "Amharic",
@@ -410,7 +410,7 @@ export const codeToLanguage:Record<string, string> = {
 };
 
 // Object mapping language names to codes
-export const languageToCode:Record<string, string> = {
+export const languageToCode: Record<string, string> = {
     Afrikaans: "af",
     Albanian: "sq",
     Amharic: "am",

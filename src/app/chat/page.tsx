@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
@@ -33,7 +31,7 @@ export default function ChatPage() {
     }, []);
 
     return (
-        <div className="flex h-screen w-full overflow-hidden bg-white">
+        <>
             {/* Mobile Menu Toggle */}
             <button
                 onClick={toggleSidebar}
@@ -43,22 +41,18 @@ export default function ChatPage() {
                 <Menu size={24} />
             </button>
 
-            <ChatSidebar
-                isOpen={isSidebarOpen}
-                onCloseSidebar={toggleSidebar}
-                
-            />
-
             {/* Chat Window */}
-            <main className="flex-1 flex flex-col h-full w-full overflow-hidden">
-                <div className="flex flex-col h-full overflow-hidden">
+            <main className="flex-1  flex h-full  w-full overflow-hidden">
+                <ChatSidebar isOpen={isSidebarOpen} onCloseSidebar={toggleSidebar} />
+
+                <div className="flex flex-col flex-1 w-full overflow-hidden">
                     {active && (
                         <>
                             <ChatHeader
                                 chatId={active}
                                 onSettingsClick={() => console.log("Settings clicked")}
                             />
-                            <div className="flex-1 min-h-0 overflow-hidden">
+                            <div className="flex-1 overflow-hidden">
                                 <ChatMessagesList />
                             </div>
                             <ChatInput onSendMessage={() => {}} />
@@ -66,6 +60,6 @@ export default function ChatPage() {
                     )}
                 </div>
             </main>
-        </div>
+        </>
     );
 }

@@ -19,12 +19,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     return (
         <SessionProvider>
             <html lang="en" className={`${GeistSans.variable}`}>
-                <body>         
-
+                <body>
                     <TRPCReactProvider>
                         <LastSeenProvider>{children}</LastSeenProvider>
                     </TRPCReactProvider>
-                    
                 </body>
             </html>
         </SessionProvider>

@@ -39,13 +39,11 @@ export const ChatMessagesList: React.FC = () => {
     // }, [active, chatMessages]);
 
     return (
-        <div ref={ref} className="flex flex-col flex-1 h-full overflow-y-auto relative">
-            <div className="flex flex-col flex-1 min-h-0">
-                {chatMessages &&
-                    (chatMessages || []).map((message, idx) => (
-                        <ChatMessageItem key={message.id} idx={idx} />
-                    ))}
-            </div>
+        <div ref={ref} className="flex flex-col flex-1 h-full  w-full overflow-y-scroll relative">
+            {chatMessages &&
+                (chatMessages || []).map((message, idx) => (
+                    <ChatMessageItem key={message.id} idx={idx} />
+                ))}
         </div>
     );
 };

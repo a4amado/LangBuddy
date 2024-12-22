@@ -4,20 +4,12 @@ import { PropsWithChildren, useState } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-    Menu,
-    X,
-    Home,
-    MessageCircle,
-    Globe,
-    LogOut,
-    User,
-} from "lucide-react";
+import { Menu, X, Home, MessageCircle, Globe, LogOut, User } from "lucide-react";
 import { Avatar, Button, Dropdown, Spin } from "antd";
 import type { MenuProps } from "antd";
 
 export default function PageWrapper({ children }: PropsWithChildren) {
-    const { data: session, status } = useSession();  // Add status
+    const { data: session, status } = useSession(); // Add status
     const router = useRouter();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -48,7 +40,7 @@ export default function PageWrapper({ children }: PropsWithChildren) {
             label: "Chat",
             icon: <MessageCircle size={20} />,
             href: "/chat",
-        }
+        },
     ];
 
     const profileMenuItems: MenuProps["items"] = [
@@ -67,9 +59,9 @@ export default function PageWrapper({ children }: PropsWithChildren) {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="h-dvh flex-1 bg-gray-50 overflow-hidden">
             {/* Header */}
-            <header className="bg-white shadow-sm">
+            <header className="bg-white shadow-sm sticky top-0 left-0 w-full z-20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-16">
                         {/* Logo */}
@@ -152,7 +144,7 @@ export default function PageWrapper({ children }: PropsWithChildren) {
             </header>
 
             {/* Main Content */}
-            {children}
+            <div className="overflow-hidden h-[calc(100dvh-60px)] pb-5">{children}</div>
         </div>
     );
 }
