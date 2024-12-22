@@ -1,7 +1,7 @@
 "use server";
 
 import React from "react";
-import { Globe, Languages, Book, Heart } from "lucide-react";
+import { Globe, Languages, Book, Heart, LoaderCircle } from "lucide-react";
 
 import { NextPageContext } from "next";
 import { db } from "~/server/db";
@@ -12,6 +12,11 @@ import { redirect } from "next/navigation";
 
 import dynamic from "next/dynamic";
 import PageWrapper from "~/app/_components/page-wrapper";
+
+// import Post from "~/app/_components/post/Post";
+const Post = dynamic(() => import("~/app/_components/post/Post"),  {
+    loading:() =>  <LoaderCircle />
+})
 
 const DynamicHeader = dynamic(() => import("../../_components/start-chat"), {
     loading: () => <p>Loading...</p>,
@@ -30,7 +35,23 @@ export default async function ProfilePage({ params }: { params: Promise<{ user_i
     const user_id = (await params).user_id;
     const user = await db.user.findUnique({
         where: { id: user_id },
-        include: { Profile: true, UsersLanguage: true },
+        include: {
+            Profile: true,
+            UsersLanguage: true,
+            posts: {
+                orderBy: { createdAt: "desc" },
+                take: 10,
+                include: {
+                    createdBy: {
+                        select: {
+                            image: true,
+                            name: true,
+                            id: true,
+                        },
+                    },
+                },
+            },
+        },
     });
     if (!user || !user.boarded) {
         redirect("/");
@@ -143,6 +164,28 @@ export default async function ProfilePage({ params }: { params: Promise<{ user_i
                                     </span>
                                 ))}
                             </div>
+                        </div>
+                        <div className="mb-8">
+                            <h2 className="text-lg font-semibold mb-4">Latest Posts:</h2>
+                            {user.posts.map((post) => (
+                                <Post
+                                    key={post.id}
+                                    author={{
+                                        id: post?.createdBy?.id || "deleted",
+                                        image: post?.createdBy?.image || "deleted",
+                                        name: post?.createdBy?.name || "delete",
+                                    }}
+                                    commentCount={0}
+                                    createdAt={post.createdAt}
+                                    content={post.content}
+                                    title={post.title}
+                                    id={post.id}
+                                    downvotes={0}
+                                    upvotes={0}
+                                    
+                                    userVote={"down"}
+                                />
+                            ))}
                         </div>
                     </div>
                 </div>

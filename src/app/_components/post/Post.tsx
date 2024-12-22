@@ -28,10 +28,7 @@ interface PostProps {
     commentCount: number;
     userVote?: "up" | "down" | null;
     isBookmarked?: boolean;
-    onVote: (postId: string, voteType: "up" | "down") => void;
-    onBookmark: (postId: string) => void;
-    onShare: (postId: string) => void;
-    onComment: (postId: string) => void;
+    
 }
 
 export default function Post({
@@ -45,10 +42,7 @@ export default function Post({
     commentCount,
     userVote,
     isBookmarked = false,
-    onVote,
-    onBookmark,
-    onShare,
-    onComment,
+ 
 }: PostProps) {
     const [isExpanded, setIsExpanded] = useState(false);
     const voteScore = upvotes - downvotes;
@@ -66,9 +60,9 @@ export default function Post({
 
     const handleVote = (type: "up" | "down") => {
         if (userVote === type) {
-            onVote(id, type); // Remove vote
+            
         } else {
-            onVote(id, type); // Add or change vote
+            
         }
     };
 
@@ -152,7 +146,7 @@ export default function Post({
 
                 {/* Comments */}
                 <button
-                    onClick={() => onComment(id)}
+                    onClick={console.log}
                     className="flex items-center space-x-2 text-gray-500 hover:text-gray-700"
                 >
                     <MessageSquare size={20} />
@@ -161,8 +155,7 @@ export default function Post({
 
                 {/* Share */}
                 <button
-                    onClick={() => onShare(id)}
-                    className="flex items-center space-x-2 text-gray-500 hover:text-gray-700"
+onClick={console.log}                    className="flex items-center space-x-2 text-gray-500 hover:text-gray-700"
                 >
                     <Share2 size={20} />
                     <span>Share</span>
@@ -170,8 +163,7 @@ export default function Post({
 
                 {/* Bookmark */}
                 <button
-                    onClick={() => onBookmark(id)}
-                    className={`flex items-center space-x-2 ${
+onClick={console.log}                    className={`flex items-center space-x-2 ${
                         isBookmarked ? "text-yellow-600" : "text-gray-500 hover:text-gray-700"
                     }`}
                 >

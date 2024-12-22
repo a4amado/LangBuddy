@@ -99,6 +99,19 @@ export const userRouter = createTRPCRouter({
             include: {
                 Profile: true,
                 UsersLanguage: true,
+                posts: {
+                    orderBy: { createdAt: "desc" },
+                    take: 10,
+                    include: {
+                        createdBy: {
+                            select: {
+                                image: true,
+                                name: true,
+                                id: true,
+                            },
+                        },
+                    },
+                },
             },
         });
 
