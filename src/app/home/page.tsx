@@ -11,6 +11,7 @@ import { codeToLanguage, languageToCountry } from "~/data/languages";
 import { countryCodes, countryCodeToName } from "~/data/countries";
 import Flag from "react-world-flags";
 import { useRouter } from "next/navigation";
+import PageWrapper from "../_components/page-wrapper";
 
 export default function HomePage() {
     const { data: session } = useSession();
@@ -61,6 +62,7 @@ const router = useRouter()
             : recommendedUsers;
 
     return (
+        <PageWrapper>
         <div className="min-h-screen bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {/* Header */}
@@ -232,6 +234,6 @@ const router = useRouter()
                     )}
                 </div>
             </div>
-        </div>
+        </div></PageWrapper>
     );
 }

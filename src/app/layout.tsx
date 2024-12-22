@@ -8,6 +8,7 @@ import { TRPCReactProvider } from "~/trpc/react";
 import { SessionProvider, useSession } from "next-auth/react";
 import { useEffect } from "react";
 import useLatestSeen from "~/utils/useLatestSeen";
+import PageWrapper from "./_components/page-wrapper";
 
 function LastSeenProvider({ children }: Readonly<{ children: React.ReactNode }>) {
     useLatestSeen();
@@ -18,10 +19,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     return (
         <SessionProvider>
             <html lang="en" className={`${GeistSans.variable}`}>
-                <body>
+                <body>         
+
                     <TRPCReactProvider>
                         <LastSeenProvider>{children}</LastSeenProvider>
                     </TRPCReactProvider>
+                    
                 </body>
             </html>
         </SessionProvider>

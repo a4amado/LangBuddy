@@ -11,6 +11,7 @@ import { codeToLanguage, languageNames, languageToCountry } from "~/data/languag
 import { redirect } from "next/navigation";
 
 import dynamic from "next/dynamic";
+import PageWrapper from "~/app/_components/page-wrapper";
 
 const DynamicHeader = dynamic(() => import("../../_components/start-chat"), {
     loading: () => <p>Loading...</p>,
@@ -37,6 +38,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ user_i
     const native = user?.UsersLanguage.find((e) => e.rank == "mother")?.language;
 
     return (
+        <PageWrapper>
         <div className="min-h-screen bg-gray-100 p-4 md:p-8">
             <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
                 {/* Profile Header */}
@@ -133,6 +135,6 @@ export default async function ProfilePage({ params }: { params: Promise<{ user_i
                     </div>
                 </div>
             </div>
-        </div>
+        </div></PageWrapper>
     );
 }
