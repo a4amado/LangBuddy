@@ -1,67 +1,75 @@
-import { procedureTypes } from "@trpc/server/unstable-core-do-not-import";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
-import { createPost, schema$createPost } from "../views/post/create-post";
-import { db } from "~/server/db";
-import { editPost, schema$editPost } from "../views/post/edit-post";
-import { deletePost, schema$deletePost } from "../views/post/delete-post";
 import { z } from "zod";
+import { desc, eq } from "drizzle-orm";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
-export const postRoute = createTRPCRouter({
-    create: protectedProcedure.input(schema$createPost).mutation(async (opts) => {
-        return await createPost({
-            ...opts.input,
-            userID: opts.ctx.session.user.id,
-        });
+export const postRouter = createTRPCRouter({
+  create: protectedProcedure
+    .input(
+      z.object({
+        title: z.string().min(1).max(100),
+        content: z.string().min(1).max(500),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.prisma.post.create({
+        data: {
+          title: input.title,
+          content: input.content,
+          authorId: ctx.session.user.id,
+        },
+      });
     }),
-    delete: protectedProcedure.input(schema$deletePost).mutation(
-        async (opts) =>
-            await deletePost({
-                ...opts.input,
-                userID: opts.ctx.session.user.id,
-            }),
-    ),
-    edit: protectedProcedure.input(schema$editPost).mutation(async (opts) => {
-        return await editPost({
-            ...opts.input,
-            userID: opts.ctx.session.user.id,
-        });
+
+  delete: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const post = await ctx.prisma.post.findUnique({
+        where: { id: input.id },
+      });
+
+      if (!post || post.authorId !== ctx.session.user.id) {
+        throw new Error("Not authorized");
+      }
+
+      return ctx.prisma.post.delete({
+        where: { id: input.id },
+      });
     }),
-    view: publicProcedure
-        .input(
-            z.object({
-                postId: z.string().cuid(),
-            }),
-        )
-        .query(async ({ input: { postId } }) => {
-            return await db.post.findUnique({
-                where: { id: postId },
-                include: {
-                    createdBy: {
-                        select: {
-                            name: true,
-                            id: true,
-                            image: true,
-                        },
-                    },
-                },
-            });
-        }),
-    page: publicProcedure
-        .input(z.object({ page: z.number().min(0).default(0) }))
-        .query(async ({ input: { page } }) => {
-            return await db.post.findMany({
-                orderBy: { createdAt: "desc" },
-                take: 15,
-                skip: page * 15,
-                include: {
-                    createdBy: {
-                        select: {
-                            image: true,
-                            name: true,
-                            id: true,
-                        },
-                    },
-                },
-            });
-        }),
+
+  getInfinitePosts: publicProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).default(10),
+        cursor: z.string().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { limit, cursor } = input;
+
+      const posts = await ctx.prisma.post.findMany({
+        take: limit + 1,
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: { createdAt: "desc" },
+        include: {
+          author: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
+            },
+          },
+        },
+      });
+
+      let nextCursor: typeof cursor | undefined = undefined;
+      if (posts.length > limit) {
+        const nextItem = posts.pop();
+        nextCursor = nextItem?.id;
+      }
+
+      return {
+        items: posts,
+        nextCursor,
+      };
+    }),
 });

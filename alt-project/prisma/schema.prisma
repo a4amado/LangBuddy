@@ -1,0 +1,185 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id            String    @id @default(cuid())
+    name          String?
+    email         String?   @unique
+    emailVerified DateTime?
+    image         String?
+    country       String?
+    onboarded     Boolean   @default(false)
+    lastSeen      DateTime  @default(now())
+    createdAt     DateTime  @default(now())
+    updatedAt     DateTime  @updatedAt
+
+    // Auth relations
+    accounts      Account[]
+    sessions      Session[]
+
+    // App relations
+    posts         Post[]
+    profile       Profile?
+    languages     UserLanguage[]
+    chats         ChatMember[]
+    messages      ChatMessage[]
+
+    // Indexes
+    @@index([email])
+    @@index([onboarded])
+}
+
+model Profile {
+    id          String   @id @default(cuid())
+    bio         String   @db.Text
+    hobbies     String[] // Changed to array for better querying
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    // Relations
+    user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId      String   @unique
+
+    @@index([userId])
+}
+
+model UserLanguage {
+    id       String       @id @default(cuid())
+    language String
+    rank     LanguageRank
+    createdAt DateTime    @default(now())
+    updatedAt DateTime    @updatedAt
+
+    // Relations
+    user     User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId   String
+
+    @@unique([userId, language])
+    @@index([language])
+}
+
+enum LanguageRank {
+    NATIVE
+    FLUENT
+    INTERMEDIATE
+    BEGINNER
+}
+
+model Post {
+    id        String   @id @default(cuid())
+    title     String
+    content   String   @db.Text
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relations
+    author    User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
+    authorId  String?
+
+    @@index([authorId])
+    @@index([createdAt])
+}
+
+model Chat {
+    id              String        @id @default(cuid())
+    type            ChatType      @default(DIRECT)
+    createdAt       DateTime      @default(now())
+    updatedAt       DateTime      @updatedAt
+
+    // Relations
+    members         ChatMember[]
+    messages        ChatMessage[]
+    lastMessage     ChatMessage?  @relation("LastMessage", fields: [lastMessageId], references: [id])
+    lastMessageId   String?       @unique
+
+    @@index([type])
+    @@index([createdAt])
+}
+
+enum ChatType {
+    DIRECT
+    GROUP
+}
+
+model ChatMember {
+    id        String   @id @default(cuid())
+    joined    Boolean  @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relations
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId    String
+    chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+    chatId    String
+
+    @@unique([chatId, userId])
+    @@index([userId])
+    @@index([chatId])
+}
+
+model ChatMessage {
+    id        String   @id @default(cuid())
+    content   String   @db.Text
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relations
+    sender    User?    @relation(fields: [senderId], references: [id], onDelete: SetNull)
+    senderId  String?
+    chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+    chatId    String
+    lastMessageOf Chat? @relation("LastMessage")
+
+    @@index([chatId])
+    @@index([senderId])
+    @@index([createdAt])
+}
+
+model BlockedUser {
+    id          String   @id @default(cuid())
+    blockedAt   DateTime @default(now())
+    blockerId   String
+    blockedId   String
+
+    @@unique([blockerId, blockedId])
+    @@index([blockerId])
+    @@index([blockedId])
+}
+
+// NextAuth Models
+model Account {
+    id                 String  @id @default(cuid())
+    userId             String
+    type               String
+    provider           String
+    providerAccountId  String
+    refresh_token      String?  @db.Text
+    access_token       String?  @db.Text
+    expires_at         Int?
+    token_type        String?
+    scope             String?
+    id_token          String?  @db.Text
+    session_state     String?
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([provider, providerAccountId])
+    @@index([userId])
+}
+
+model Session {
+    id           String   @id @default(cuid())
+    sessionToken String   @unique
+    userId       String
+    expires      DateTime
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId])
+} 

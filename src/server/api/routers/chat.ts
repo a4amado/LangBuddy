@@ -6,6 +6,7 @@ import { getInitialChats } from "../views/get-initial-chats";
 import { getPaginatedChats, schema$getPaginatedChats } from "../views/get-paginated-chats";
 import { getSingleChat } from "../views/get-single-chat";
 import { createNewChat, schema$createNewChat } from "../views/create-new-chat";
+import { api } from "~/trpc/server";
 
 // Router Definition
 export const chatRouter = createTRPCRouter({

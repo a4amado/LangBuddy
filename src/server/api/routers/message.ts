@@ -3,8 +3,23 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { is_user_the_sender_of_this_messege } from "~/utils/is_user_the_sender_of_this_messege";
 import { db } from "~/server/db";
+import { pusher } from "~/server/pusher/client";
+import { is_user_a_part_of_this_chat } from "~/utils/is_user_a_part_of_this_chat";
 
 export const messageRouter = createTRPCRouter({
+
+    getMessegeById: protectedProcedure.input(z.object({
+        chat_id: z.string().cuid(),
+        id: z.string().cuid(),
+    })).query(async (opts) => {
+
+        return await db.chatMessege.findUnique({
+            where: {
+                id: opts.input.id
+            }
+        })
+    }),
+
     // Get messages for a chat
     getMessages: protectedProcedure
         .input(
@@ -80,10 +95,17 @@ export const messageRouter = createTRPCRouter({
                     sender_id: ctx.session.user.id,
                     chat_id: input.chatId,
                 },
-                include: {
-                    sender: true,
-                },
+                
+                include :{
+                    sender: {
+                        select: {
+                            id:true, image: true, name:true 
+                        }
+                    }
+                }
             });
+
+            pusher.trigger(ctx.session.user.id, "new_msg", message)
 
             // Update chat's last message and updatedAt
             await ctx.db.chat.update({

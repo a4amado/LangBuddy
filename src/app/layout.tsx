@@ -1,30 +1,39 @@
 "use client";
 import "~/styles/globals.css";
 
-import { GeistSans } from "geist/font/sans";
+import { Inter } from "next/font/google";
 import { type Metadata } from "next";
+import { headers } from "next/headers";
 
-import { TRPCReactProvider } from "~/trpc/react";
-import { SessionProvider, useSession } from "next-auth/react";
-import { useEffect } from "react";
-import useLatestSeen from "~/utils/useLatestSeen";
-import PageWrapper from "./_components/page-wrapper";
+import { TRPCReactProvider } from "@/trpc/react";
+import { cn } from "@/lib/utils";
 
-function LastSeenProvider({ children }: Readonly<{ children: React.ReactNode }>) {
-    useLatestSeen();
-    return children;
-}
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-    return (
-        <SessionProvider>
-            <html lang="en" className={`${GeistSans.variable}`}>
-                <body>
-                    <TRPCReactProvider>
-                        <LastSeenProvider>{children}</LastSeenProvider>
-                    </TRPCReactProvider>
-                </body>
-            </html>
-        </SessionProvider>
-    );
+export const metadata: Metadata = {
+  title: "LangBuddy - Language Learning Community",
+  description: "Connect with language learners worldwide",
+  icons: [{ rel: "icon", url: "/favicon.ico" }],
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body className={cn(
+        "min-h-screen bg-background font-sans antialiased",
+        inter.variable
+      )}>
+        <TRPCReactProvider headers={headers()}>
+          {children}
+        </TRPCReactProvider>
+      </body>
+    </html>
+  );
 }
