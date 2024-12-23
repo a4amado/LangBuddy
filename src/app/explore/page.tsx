@@ -140,13 +140,13 @@ const mockHandlers = {
     },
 };
 export default function PostPage() {
-    const post = api.post.page.useQuery({ page: 0 });
+    const post = api.post.getInfinitePosts.useQuery({ cursor: undefined,limit:15 });
 
     return (
         <PageWrapper>
             <div className="w-full  overflow-y-scroll h-full">
                 <div className="max-w-4xl  mx-auto h-full py-4">
-                    {post?.data?.map((post) => (
+                    {post?.data?.items?.map((post) => (
                         <Post
                             key={post.id}
                             author={{

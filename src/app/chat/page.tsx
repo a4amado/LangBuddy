@@ -10,9 +10,8 @@ import { ChatMessagesList } from "./ChatMessages/ChatMessagesList";
 import { api } from "~/trpc/react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { addNewMessage, AppDispatch, init, RootState, ssssssssssss } from "./ChatState/store";
+import { addNewMessage, AppDispatch, init, RootState } from "./ChatState/store";
 import { useSession } from "next-auth/react";
-import { client } from "~/trpc/fetch";
 
 // Initialize Pusher
 Pusher.logToConsole = true;
@@ -22,7 +21,7 @@ export default function ChatPage() {
     const dispatch = useDispatch<AppDispatch>();
     const user = useSession();
     const active = useSelector<RootState>((state) => state.active) as RootState["active"];
-    const chats = api.chat.initialChats.useQuery();
+    const chats = api.chat.getAll.useQuery();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     
 
@@ -38,9 +37,7 @@ export default function ChatPage() {
         // Bind to event
         channel.bind('new_msg', async function(data: any) {
             dispatch(addNewMessage(data as any))
-            // @ts-ignore
-            dispatch(ssssssssssss(data.id,data.chat_id))
-            console.log('Received messasssssge:');
+            
         });
 
 

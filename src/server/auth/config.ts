@@ -15,7 +15,7 @@ declare module "next-auth" {
     interface Session extends DefaultSession {
         user: {
             id: string;
-            boarded: boolean;
+            isBoarded: boolean;
             // ...other properties
             // role: UserRole;
         } & DefaultSession["user"];
@@ -57,7 +57,7 @@ export const authConfig: NextAuthConfig = {
             user: {
                 ...session.user,
                 id: user.id,
-                boarded: session.user.boarded,
+                isBoarded: session.user.isBoarded,
             },
         }),
     },

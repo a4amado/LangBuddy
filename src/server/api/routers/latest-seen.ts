@@ -6,7 +6,7 @@ export const latestSeenRouter = createTRPCRouter({
         return await db.user.update({
             where: { id: opts.ctx.session.user.id },
             data: {
-                latestSeen: new Date(),
+                lastSeen: new Date(),
             },
         });
     }),

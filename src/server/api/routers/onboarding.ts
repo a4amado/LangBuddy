@@ -9,37 +9,37 @@ export const onBoardingRouter = createTRPCRouter({
         console.log(user_id);
 
         const boarded = await db.user.findFirst({ where: { id: user_id } });
-        if (boarded?.boarded) {
-            throw Error("already does the onboarding");
+        if (boarded?.isBoarded) {
+            throw Error("already did the onboarding");
         }
         db.$transaction([
             db.profile.create({
                 data: {
                     bio: opts.input.bio,
                     hobbies: opts.input.hobbies,
-                    user_id: user_id,
+                    userId: user_id,
                 },
             }),
 
-            db.usersLanguage.create({
+            db.userLanguage.create({
                 data: {
-                    user_id: user_id,
+                    userId: user_id,
                     language: opts.input.mother,
-                    rank: "mother",
+                    rank: "MOTHER",
                 },
             }),
             ...(opts.input.other ?? []).map((e) =>
-                db.usersLanguage.create({
+                db.userLanguage.create({
                     data: {
-                        user_id: user_id,
+                        userId: user_id,
                         language: e ?? "",
-                        rank: "other",
+                        rank: "OTHER",
                     },
                 }),
             ),
             db.user.update({
                 where: { id: user_id },
-                data: { boarded: true, country: opts.input.country },
+                data: { isBoarded: true, country: opts.input.country },
             }),
         ]);
 

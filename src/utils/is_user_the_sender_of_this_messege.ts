@@ -7,14 +7,14 @@ export const is_user_the_sender_of_this_messege = ({
     messege_id: string;
     user_id: string;
 }) =>
-    db.chatMessege.findFirst({
+    db.message.findFirst({
         where: {
             AND: [
                 {
                     id: messege_id,
                 },
                 {
-                    sender_id: user_id,
+                   senderId: user_id
                 },
             ],
         },

@@ -1,10 +1,9 @@
 import { inferRouterOutputs } from "@trpc/server";
 import { configureStore, createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { AppRouter } from "~/server/api/root";
-import { client } from "~/trpc/fetch";
 type AppOutput = inferRouterOutputs<AppRouter>;
 
-const initialState: AppOutput["chat"]["initialChats"] = {
+const initialState: AppOutput["chat"]["getAll"] = {
     state: "loading",
     chats: [],
     messages: {},
@@ -12,29 +11,28 @@ const initialState: AppOutput["chat"]["initialChats"] = {
 };
 
 
-export async function ssssssssssss(messege_id:string, chat_id:string) {
-    const response = await client.message.getMessegeById.query({ chat_id, id:messege_id });
-    console.log("res", response);
-    
-}
+ 
 const chatSlice = createSlice({
     initialState,
     name: "chats",
     reducers: {
-        init: (state, action: PayloadAction<AppOutput["chat"]["initialChats"]>) => {
-            state.active = action.payload.active;
+        init: (state, action: PayloadAction<AppOutput["chat"]["getAll"]>) => {
+            state.active = state.chats[0]?.id || "";
             state.chats = action.payload.chats;
-            state.messages = action.payload.messages;
-            state.state = action.payload.state;
+            
+            
+            
+            state.messages = action.payload.messages;            
+            state.state = "idel";
         },
         switch: (state, action: PayloadAction<{ id: string }>) => {
             state.active = action.payload.id;
         },
         addNewMessage: (
             state,
-            action: PayloadAction<AppOutput["chat"]["initialChats"]["messages"][0][0]>,
+            action: PayloadAction<AppOutput["chat"]["getAll"]["messages"][0][0]>,
         ) => {
-            const chatId = action.payload.chat_id;
+            const chatId = action.payload.chatId;
             const chatIndex = state.chats.findIndex((chat) => chat.id === chatId);
 
             if (chatIndex !== -1) {
@@ -49,7 +47,7 @@ const chatSlice = createSlice({
                     // @ts-ignore
                     state.chats[chatIndex] = {
                         ...state.chats[chatIndex],
-                        lastMessege: { ...action.payload },
+                        lastMessage: { ...action.payload },
                     };
                 }
                 console.log(action.payload);

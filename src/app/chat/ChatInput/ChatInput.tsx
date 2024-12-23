@@ -5,8 +5,8 @@ import { Send } from "lucide-react";
 
 import { useSession } from "next-auth/react";
 import { api } from "~/trpc/react";
-import { useSelector } from "react-redux";
-import { RootState } from "../ChatState/store";
+import { useDispatch, useSelector } from "react-redux";
+import { addNewMessage, AppDispatch, RootState } from "../ChatState/store";
 
 interface ChatInputProps {
     onSendMessage: (message: string) => void;
@@ -15,7 +15,12 @@ interface ChatInputProps {
 export const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
     const [message, setMessage] = useState("");
     const { data: session } = useSession();
-    const { mutate: sendMessage } = api.message.send.useMutation();
+    const dispatch = useDispatch<AppDispatch>()
+    const { mutate: sendMessage } = api.messege.send.useMutation({
+        onSuccess(data) {
+            dispatch(addNewMessage(data))
+        },
+    });
     const active = useSelector<RootState>((state) => state.active) as RootState["active"];
     const chats = useSelector<RootState>((state) => state.chats) as RootState["chats"];
     const handleSendMessage = useCallback(() => {

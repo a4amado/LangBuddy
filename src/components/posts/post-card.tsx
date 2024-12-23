@@ -3,8 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { type Post, type User } from "@prisma/client";
-import { formatRelativeTime } from "@/lib/utils";
-import { api } from "@/trpc/react";
+import { formatRelativeTime } from "~/lib/utils";
+import { api } from "~/trpc/react";
 
 interface PostWithAuthor extends Post {
   author: User | null;
@@ -17,11 +17,7 @@ interface PostCardProps {
 export function PostCard({ post }: PostCardProps) {
   const utils = api.useUtils();
 
-  const { mutate: deletePost } = api.post.delete.useMutation({
-    onSuccess: () => {
-      utils.post.getInfinitePosts.invalidate();
-    },
-  });
+  
 
   return (
     <div className="rounded-lg border bg-card p-4">

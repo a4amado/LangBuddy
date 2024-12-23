@@ -2,9 +2,9 @@
 
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
-import { api } from "@/trpc/react";
+import { api } from "~/trpc/react";
 import { PostCard } from "./post-card";
-import { LoadingSpinner } from "@/components/ui/loading";
+import { LoadingSpinner } from "~/components/ui/loading";
 
 export function PostFeed() {
   const { ref, inView } = useInView();
@@ -32,7 +32,7 @@ export function PostFeed() {
     return <LoadingSpinner />;
   }
 
-  if (!data?.pages[0].items.length) {
+  if (!data?.pages || !data?.pages[0].items.length) {
     return (
       <div className="flex flex-col items-center justify-center gap-2 py-12">
         <h3 className="text-2xl font-semibold">No posts yet</h3>

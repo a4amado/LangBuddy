@@ -1,6 +1,6 @@
 import { db } from "~/server/db";
 
-export async function getInitialChats(userId: string) {
+export async function getgetAll(userId: string) {
     const chats = await db.chat.findMany({
         where: {
             ChatMember: {

@@ -11,14 +11,14 @@ export const is_user_a_part_of_this_chat = ({
         where: {
             AND: [
                 {
-                    chat_id: chat_id,
+                    chatId: chat_id,
                 },
                 {
-                    user_id: user_id,
+                    userId: user_id,
                 },
             ],
         },
         select: {
-            chat_id: true,
+            chatId: true,
         },
     });

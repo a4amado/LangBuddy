@@ -20,12 +20,7 @@ const DynamicHeader = dynamic(() => import("../../_components/start-chat"), {
     loading: () => <p>Loading...</p>,
 });
 
-// Correct type for params in App Router
-interface PageProps {
-    params: {
-        user_id: string;
-    };
-}
+
 
 // Correct way to declare a Server Component with params in App Router
 export default async function ProfilePage({ params }: { params: Promise<{ user_id: string }> }) {
@@ -34,8 +29,8 @@ export default async function ProfilePage({ params }: { params: Promise<{ user_i
     const user = await db.user.findUnique({
         where: { id: user_id },
         include: {
-            Profile: true,
-            UsersLanguage: true,
+            profile: true,
+            languages: true,
             posts: {
                 orderBy: { createdAt: "desc" },
                 take: 10,
@@ -51,10 +46,10 @@ export default async function ProfilePage({ params }: { params: Promise<{ user_i
             },
         },
     });
-    if (!user || !user.boarded) {
+    if (!user || !user.isBoarded) {
         redirect("/");
     }
-    const native = user?.UsersLanguage.find((e) => e.rank == "mother")?.language;
+    const native = user?.languages.find((e) => e.rank == "MOTHER")?.language;
 
     return (
         <PageWrapper>
@@ -113,7 +108,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ user_i
                                 <h2 className="text-lg font-semibold">Learning</h2>
                             </div>
                             <div className="flex flex-wrap gap-2">
-                                {user?.UsersLanguage.filter((e) => e.rank != "mother").map(
+                                {user?.languages.filter((e) => e.rank != "MOTHER").map(
                                     (lang) => (
                                         <span
                                             key={lang.language}
@@ -142,7 +137,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ user_i
                         <div className="mb-8">
                             <h2 className="text-lg font-semibold mb-4">Bio</h2>
                             <p className="text-gray-600 leading-relaxed bg-gray-50 p-4 rounded-lg">
-                                {user?.Profile?.bio}
+                                {user?.profile?.bio}
                             </p>
                         </div>
 
@@ -153,7 +148,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ user_i
                                 <h2 className="text-lg font-semibold">Hobbies</h2>
                             </div>
                             <div className="flex flex-wrap gap-2">
-                                {user?.Profile?.hobbies.split(",").map((hobby) => (
+                                {user?.profile?.hobbies.split(",").map((hobby) => (
                                     <span
                                         key={hobby}
                                         className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors"

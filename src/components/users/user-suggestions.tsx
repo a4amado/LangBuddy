@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { api } from "@/trpc/react";
-import { LoadingSpinner } from "@/components/ui/loading";
+
+import { LoadingSpinner } from "~/components/ui/loading";
+import { api } from "~/trpc/react";
 
 export function UserSuggestions() {
   const { data: users, isLoading } = api.user.getRecommended.useQuery(

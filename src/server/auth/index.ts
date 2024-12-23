@@ -1,45 +1,10 @@
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import { type GetServerSidePropsContext } from "next";
-import {
-  getServerSession,
-  type DefaultSession,
-  type NextAuthOptions,
-} from "next-auth";
-import { prisma } from "@/server/db";
+import NextAuth from "next-auth";
+import { cache } from "react";
 
-declare module "next-auth" {
-  interface Session extends DefaultSession {
-    user: {
-      id: string;
-      onboarded: boolean;
-    } & DefaultSession["user"];
-  }
+import { authConfig } from "./config";
 
-  interface User {
-    onboarded: boolean;
-  }
-}
+const { auth: uncachedAuth, handlers, signIn, signOut } = NextAuth(authConfig);
 
-export const authOptions: NextAuthOptions = {
-  callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-        onboarded: user.onboarded,
-      },
-    }),
-  },
-  adapter: PrismaAdapter(prisma),
-  providers: [
-    // Add providers here
-  ],
-};
+const auth = cache(uncachedAuth);
 
-export const getServerAuthSession = (ctx: {
-  req: GetServerSidePropsContext["req"];
-  res: GetServerSidePropsContext["res"];
-}) => {
-  return getServerSession(ctx.req, ctx.res, authOptions);
-};
+export { auth, handlers, signIn, signOut };

@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { desc, eq } from "drizzle-orm";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { db } from "~/server/db";
 
 export const postRouter = createTRPCRouter({
   create: protectedProcedure
@@ -11,11 +11,12 @@ export const postRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.prisma.post.create({
+      return db.post.create({
         data: {
           title: input.title,
           content: input.content,
-          authorId: ctx.session.user.id,
+          
+          createdById:ctx.session.user.id,
         },
       });
     }),
@@ -23,15 +24,15 @@ export const postRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const post = await ctx.prisma.post.findUnique({
+      const post = await db.post.findUnique({
         where: { id: input.id },
       });
 
-      if (!post || post.authorId !== ctx.session.user.id) {
+      if (!post || post.createdById !== ctx.session.user.id) {
         throw new Error("Not authorized");
       }
 
-      return ctx.prisma.post.delete({
+      return db.post.delete({
         where: { id: input.id },
       });
     }),
@@ -46,12 +47,12 @@ export const postRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const { limit, cursor } = input;
 
-      const posts = await ctx.prisma.post.findMany({
+      const posts = await db.post.findMany({
         take: limit + 1,
         cursor: cursor ? { id: cursor } : undefined,
         orderBy: { createdAt: "desc" },
         include: {
-          author: {
+          createdBy: {
             select: {
               id: true,
               name: true,
