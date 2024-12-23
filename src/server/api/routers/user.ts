@@ -4,26 +4,24 @@ import { TRPCError } from "@trpc/server";
 import { db } from "~/server/db";
 
 export const userRouter = createTRPCRouter({
-    getById: publicProcedure
-        .input(z.object({ id: z.string() }))
-        .query(async ({ ctx, input }) => {
-            const user = await db.user.findUnique({
-                where: { id: input.id },
-                include: {
-                    languages: true,
-                    profile: true,
-                },
+    getById: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
+        const user = await db.user.findUnique({
+            where: { id: input.id },
+            include: {
+                languages: true,
+                profile: true,
+            },
+        });
+
+        if (!user) {
+            throw new TRPCError({
+                code: "NOT_FOUND",
+                message: "User not found",
             });
+        }
 
-            if (!user) {
-                throw new TRPCError({
-                    code: "NOT_FOUND",
-                    message: "User not found",
-                });
-            }
-
-            return user;
-        }),
+        return user;
+    }),
 
     getRecommended: protectedProcedure
         .input(z.object({ limit: z.number().min(1).max(100).default(5) }))
@@ -63,7 +61,7 @@ export const userRouter = createTRPCRouter({
         .input(
             z.object({
                 bio: z.string().min(1).max(500),
-                hobbies: z.string()
+                hobbies: z.string(),
             }),
         )
         .mutation(async ({ ctx, input }) => {
@@ -82,7 +80,7 @@ export const userRouter = createTRPCRouter({
             z.array(
                 z.object({
                     language: z.string(),
-                    rank: z.enum(["MOTHER","OTHER"]),
+                    rank: z.enum(["MOTHER", "OTHER"]),
                 }),
             ),
         )
@@ -97,11 +95,10 @@ export const userRouter = createTRPCRouter({
                 data: input.map((lang) => ({
                     ...lang,
                     userId: ctx.session.user.id,
-                    
                 })),
             });
         }),
-        search: protectedProcedure
+    search: protectedProcedure
         .input(
             z.object({
                 query: z.string().optional(),
@@ -130,10 +127,11 @@ export const userRouter = createTRPCRouter({
                 include: {
                     profile: {
                         select: {
-                            bio: true, hobbies: true,
-                        }
+                            bio: true,
+                            hobbies: true,
+                        },
                     },
-                    languages: { select: {language: true,rank: true, }},
+                    languages: { select: { language: true, rank: true } },
                 },
                 take: input.take,
                 skip: input.skip,

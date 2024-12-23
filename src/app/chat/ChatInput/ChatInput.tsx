@@ -15,10 +15,10 @@ interface ChatInputProps {
 export const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
     const [message, setMessage] = useState("");
     const { data: session } = useSession();
-    const dispatch = useDispatch<AppDispatch>()
+    const dispatch = useDispatch<AppDispatch>();
     const { mutate: sendMessage } = api.messege.send.useMutation({
         onSuccess(data) {
-            dispatch(addNewMessage(data))
+            dispatch(addNewMessage(data));
         },
     });
     const active = useSelector<RootState>((state) => state.active) as RootState["active"];

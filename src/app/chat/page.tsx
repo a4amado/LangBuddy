@@ -15,31 +15,27 @@ import { useSession } from "next-auth/react";
 
 // Initialize Pusher
 Pusher.logToConsole = true;
- 
-  
+
 export default function ChatPage() {
     const dispatch = useDispatch<AppDispatch>();
     const user = useSession();
     const active = useSelector<RootState>((state) => state.active) as RootState["active"];
     const chats = api.chat.getAll.useQuery();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    
 
     useEffect(() => {
         // Initialize Pusher
-        const pusher = new Pusher('e52b6be16531b104cc75', {
-            cluster: 'eu'
+        const pusher = new Pusher("e52b6be16531b104cc75", {
+            cluster: "eu",
         });
 
         // Subscribe to channel
         const channel = pusher.subscribe(user.data?.user.id || "");
 
         // Bind to event
-        channel.bind('new_msg', async function(data: any) {
-            dispatch(addNewMessage(data as any))
-            
+        channel.bind("new_msg", async function (data: any) {
+            dispatch(addNewMessage(data as any));
         });
-
 
         // Initialize chats
         if (chats.data) {

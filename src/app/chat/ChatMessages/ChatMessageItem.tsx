@@ -21,7 +21,7 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ idx }) => {
     // Then select the message using the active chat and index
     const message = useSelector<RootState>((state: RootState) => {
         if (state.state == "loading" || !state.messages[activeChat || ""]) return null;
-        return state.messages[activeChat || ""]
+        return state.messages[activeChat || ""];
     }) as RootState["messages"][0];
 
     // If no message, return null

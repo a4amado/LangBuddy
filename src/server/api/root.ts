@@ -7,12 +7,12 @@ import { latestSeenRouter } from "./routers/latest-seen";
 import { onBoardingRouter } from "./routers/onboarding";
 
 export const appRouter = createTRPCRouter({
-  post: postRouter,
-  user: userRouter,
-  chat: chatRouter,
-  messege:messageRouter,
-  seen: latestSeenRouter,
-  boarding: onBoardingRouter
+    post: postRouter,
+    user: userRouter,
+    chat: chatRouter,
+    messege: messageRouter,
+    seen: latestSeenRouter,
+    boarding: onBoardingRouter,
 });
 
 export type AppRouter = typeof appRouter;

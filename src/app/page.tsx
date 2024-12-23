@@ -2,17 +2,17 @@ import { redirect } from "next/navigation";
 import { auth } from "~/server/auth";
 
 export default async function HomePage() {
-  const session = await auth();
+    const session = await auth();
 
-  console.log(session);
-  
-  if (!session?.user) {
-    redirect("/auth/signin");
-  }
+    console.log(session);
 
-  if (!session.user.isBoarded) {
-    redirect("/onboarding");
-  }
+    if (!session?.user) {
+        redirect("/auth/signin");
+    }
 
-  redirect("/home");
+    if (!session.user.isBoarded) {
+        redirect("/onboarding");
+    }
+
+    redirect("/home");
 }

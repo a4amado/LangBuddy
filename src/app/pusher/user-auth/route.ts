@@ -8,10 +8,9 @@ export const POST: NextApiHandler = async (req, res) => {
         res.status(405).end();
     }
     const socketId = req.body.socket_id;
-  
 
     const authResponse = pusher.authenticateUser(socketId, {
-        id: user?.user?.id ?? ""
+        id: user?.user?.id ?? "",
     });
     res.send(authResponse);
-  }
+};

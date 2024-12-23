@@ -15,12 +15,9 @@ import PageWrapper from "~/app/_components/page-wrapper";
 
 // import Post from "~/app/_components/post/Post";
 
-
 const DynamicHeader = dynamic(() => import("../../_components/start-chat"), {
     loading: () => <p>Loading...</p>,
 });
-
-
 
 // Correct way to declare a Server Component with params in App Router
 export default async function ProfilePage({ params }: { params: Promise<{ user_id: string }> }) {
@@ -108,8 +105,9 @@ export default async function ProfilePage({ params }: { params: Promise<{ user_i
                                 <h2 className="text-lg font-semibold">Learning</h2>
                             </div>
                             <div className="flex flex-wrap gap-2">
-                                {user?.languages.filter((e) => e.rank != "MOTHER").map(
-                                    (lang) => (
+                                {user?.languages
+                                    .filter((e) => e.rank != "MOTHER")
+                                    .map((lang) => (
                                         <span
                                             key={lang.language}
                                             className=" flex px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm hover:bg-blue-200 transition-colors"
@@ -128,8 +126,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ user_i
                                             }
                                             )
                                         </span>
-                                    ),
-                                )}
+                                    ))}
                             </div>
                         </div>
 
@@ -160,7 +157,6 @@ export default async function ProfilePage({ params }: { params: Promise<{ user_i
                         </div>
                         <div className="mb-8">
                             <h2 className="text-lg font-semibold mb-4">Latest Posts:</h2>
-                           
                         </div>
                     </div>
                 </div>

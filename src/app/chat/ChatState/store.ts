@@ -10,8 +10,6 @@ const initialState: AppOutput["chat"]["getAll"] = {
     active: "",
 };
 
-
- 
 const chatSlice = createSlice({
     initialState,
     name: "chats",
@@ -19,10 +17,8 @@ const chatSlice = createSlice({
         init: (state, action: PayloadAction<AppOutput["chat"]["getAll"]>) => {
             state.active = state.chats[0]?.id || "";
             state.chats = action.payload.chats;
-            
-            
-            
-            state.messages = action.payload.messages;            
+
+            state.messages = action.payload.messages;
             state.state = "idel";
         },
         switch: (state, action: PayloadAction<{ id: string }>) => {

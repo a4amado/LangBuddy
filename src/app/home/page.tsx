@@ -12,12 +12,10 @@ import Flag from "react-world-flags";
 import { useRouter } from "next/navigation";
 import PageWrapper from "../_components/page-wrapper";
 
-
-
 export default function HomePage() {
     const { data: session } = useSession();
     const router = useRouter();
-    
+
     // State management
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedLanguages, setSelectedLanguages] = useState<string>("");
@@ -25,26 +23,23 @@ export default function HomePage() {
     const [debouncedSearch, setDebouncedSearch] = useState("");
 
     // Fetch user languages for the filter
-    
 
     // Search users query
-    const {
-        data: searchResults,
-        isLoading: isLoadingSearch
-    } = api.user.search.useQuery({
-        query: debouncedSearch,
-        languages: selectedLanguages,
-    }, {
-        enabled: debouncedSearch !== "" || selectedLanguages !== "" || selectedCountry !== "",
-    });
+    const { data: searchResults, isLoading: isLoadingSearch } = api.user.search.useQuery(
+        {
+            query: debouncedSearch,
+            languages: selectedLanguages,
+        },
+        {
+            enabled: debouncedSearch !== "" || selectedLanguages !== "" || selectedCountry !== "",
+        },
+    );
 
     // Recommended users query
-    const {
-        data: recommendedUsers,
-        isLoading: isLoadingRecommended
-    } = api.user.getRecommended.useQuery(undefined, {
-        enabled: debouncedSearch === "" && selectedLanguages === "" && selectedCountry === "",
-    });
+    const { data: recommendedUsers, isLoading: isLoadingRecommended } =
+        api.user.getRecommended.useQuery(undefined, {
+            enabled: debouncedSearch === "" && selectedLanguages === "" && selectedCountry === "",
+        });
 
     // Create chat mutation
     const { mutate: createChat } = api.chat.create.useMutation({
@@ -68,7 +63,7 @@ export default function HomePage() {
 
     const handleStartChat = (userId: string) => {
         if (!session) {
-            router.push('/auth/signin');
+            router.push("/auth/signin");
             return;
         }
         createChat({ userId });
@@ -111,7 +106,6 @@ export default function HomePage() {
                                 value={selectedLanguages}
                                 onChange={setSelectedLanguages}
                                 className="w-full"
-                                
                                 options={languageCodes?.map((code) => ({
                                     label: (
                                         <div className="flex items-center">
@@ -122,7 +116,7 @@ export default function HomePage() {
                                             {codeToLanguage[code]}
                                         </div>
                                     ),
-                                    value: code
+                                    value: code,
                                 }))}
                             />
                         </div>

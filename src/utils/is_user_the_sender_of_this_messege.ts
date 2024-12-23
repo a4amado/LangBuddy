@@ -14,7 +14,7 @@ export const is_user_the_sender_of_this_messege = ({
                     id: messege_id,
                 },
                 {
-                   senderId: user_id
+                    senderId: user_id,
                 },
             ],
         },

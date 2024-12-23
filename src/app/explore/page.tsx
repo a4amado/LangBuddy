@@ -140,7 +140,7 @@ const mockHandlers = {
     },
 };
 export default function PostPage() {
-    const post = api.post.getInfinitePosts.useQuery({ cursor: undefined,limit:15 });
+    const post = api.post.getInfinitePosts.useQuery({ cursor: undefined, limit: 15 });
 
     return (
         <PageWrapper>

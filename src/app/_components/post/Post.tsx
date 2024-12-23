@@ -109,9 +109,7 @@ export default function Post({
             {/* Post Content */}
             <Link href={`/post/${id}`} className="block mb-4">
                 <h2 className="text-xl font-semibold text-gray-900 mb-2">{title}</h2>
-                <div className={`text-gray-700 ${!isExpanded && "line-clamp-3"}`}>
-                    {content}
-                </div>
+                <div className={`text-gray-700 ${!isExpanded && "line-clamp-3"}`}>{content}</div>
                 {content.length > 150 && !isExpanded && (
                     <button
                         onClick={(e) => {
@@ -183,4 +181,4 @@ export default function Post({
             </div>
         </div>
     );
-} 
+}

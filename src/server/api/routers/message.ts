@@ -7,22 +7,25 @@ import { pusher } from "~/server/pusher/client";
 import { is_user_a_part_of_this_chat } from "~/utils/is_user_a_part_of_this_chat";
 
 export const messageRouter = createTRPCRouter({
-
-    getMessegeById: protectedProcedure.input(z.object({
-        chat_id: z.string().cuid(),
-        id: z.string().cuid(),
-    })).query(async ({input: {chat_id, id}, ctx: {session}}) => {
-        if (!is_user_a_part_of_this_chat({chat_id, user_id:session.user.id})) {
-            return new TRPCError({ code: "FORBIDDEN" })
-        }
-
-        return db.message.findFirst({
-            where: {
-                id: id,
-                chatId: chat_id
+    getMessegeById: protectedProcedure
+        .input(
+            z.object({
+                chat_id: z.string().cuid(),
+                id: z.string().cuid(),
+            }),
+        )
+        .query(async ({ input: { chat_id, id }, ctx: { session } }) => {
+            if (!is_user_a_part_of_this_chat({ chat_id, user_id: session.user.id })) {
+                return new TRPCError({ code: "FORBIDDEN" });
             }
-        })
-    }),
+
+            return db.message.findFirst({
+                where: {
+                    id: id,
+                    chatId: chat_id,
+                },
+            });
+        }),
 
     // Get messages for a chat
     getMessages: protectedProcedure
@@ -33,12 +36,10 @@ export const messageRouter = createTRPCRouter({
                 skip: z.number().default(0),
             }),
         )
-        .query(async ({ ctx: {session}, input: {chatId, skip, take} }) => {
-
-            if (!is_user_a_part_of_this_chat({chat_id: chatId, user_id:session.user.id})) {
-                return new TRPCError({ code: "FORBIDDEN" })
+        .query(async ({ ctx: { session }, input: { chatId, skip, take } }) => {
+            if (!is_user_a_part_of_this_chat({ chat_id: chatId, user_id: session.user.id })) {
+                return new TRPCError({ code: "FORBIDDEN" });
             }
-
 
             const messages = await db.message.findMany({
                 where: {
@@ -51,7 +52,7 @@ export const messageRouter = createTRPCRouter({
                     createdAt: "desc",
                 },
                 take: take ?? 50,
-                skip:skip ?? 0,
+                skip: skip ?? 0,
             });
 
             return messages;
@@ -65,10 +66,10 @@ export const messageRouter = createTRPCRouter({
                 content: z.string(),
             }),
         )
-        .mutation(async ({ ctx: {session}, input: {chatId,content} }) => {
+        .mutation(async ({ ctx: { session }, input: { chatId, content } }) => {
             // Check if user is member of chat
-            
-            if (!is_user_a_part_of_this_chat({ chat_id:chatId, user_id: session.user.id})) {
+
+            if (!is_user_a_part_of_this_chat({ chat_id: chatId, user_id: session.user.id })) {
                 throw new TRPCError({
                     code: "FORBIDDEN",
                     message: "You are not a member of this chat",
@@ -81,30 +82,30 @@ export const messageRouter = createTRPCRouter({
                     senderId: session.user.id,
                     chatId: chatId,
                 },
-                
-                include :{
+
+                include: {
                     sender: {
                         select: {
-                            id:true, image: true, name:true 
-                        }
-                    }
-                }
+                            id: true,
+                            image: true,
+                            name: true,
+                        },
+                    },
+                },
             });
-
 
             const users = await db.chatMember.findMany({
                 where: {
-                    chatId: chatId
+                    chatId: chatId,
                 },
-                select: {userId: true}
-            })
-            
-            users.forEach(({userId}) => {
+                select: { userId: true },
+            });
+
+            users.forEach(({ userId }) => {
                 if (userId != session.user.id) {
-                    pusher.trigger(userId, "new_msg", message)
+                    pusher.trigger(userId, "new_msg", message);
                 }
-            })
-            
+            });
 
             // Update chat's last message and updatedAt
             await db.chat.update({
@@ -154,8 +155,7 @@ export const messageRouter = createTRPCRouter({
                 messege_id: z.string().cuid(),
             }),
         )
-        .mutation(async ({ctx: {session}, input}) => {
-            
+        .mutation(async ({ ctx: { session }, input }) => {
             const this_msg = await is_user_the_sender_of_this_messege({
                 messege_id: input.messege_id,
                 user_id: session.user.id,

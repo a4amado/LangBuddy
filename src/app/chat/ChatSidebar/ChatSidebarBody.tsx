@@ -8,7 +8,7 @@ import { AppDispatch, RootState, switchChat } from "../ChatState/store";
 import { useSession } from "next-auth/react";
 
 export const ChatSidebarBody: React.FC = () => {
-    const chats = useSelector<RootState>((state) => state.chats) as RootState["chats"]
+    const chats = useSelector<RootState>((state) => state.chats) as RootState["chats"];
     const state = useSelector<RootState>((state) => state.state) as RootState["state"];
 
     if (state == "loading") {
@@ -44,17 +44,18 @@ const ChatSidebarBodyItem: React.FC<ChatSidebarBodyItemProps> = React.memo(({ id
     const otherUSer =
         chats[idx]?.members[0]?.id != user.data?.user.id
             ? chats[idx]?.members[0]?.name
-            : chats[idx]?.members[1]?.name
+            : chats[idx]?.members[1]?.name;
     return (
         <div
             className={`p-3 mb-2 rounded cursor-pointer ${
                 activeChat ? "bg-blue-100" : "hover:bg-gray-200"
             }`}
             role="button"
-            onClick={() =>{ 
+            onClick={() => {
                 console.log("id", id);
-                
-                dispatch(switchChat({ id }))}}
+
+                dispatch(switchChat({ id }));
+            }}
         >
             <h3 className="font-semibold">{otherUSer}</h3>
             <p className="text-sm text-gray-600 truncate">

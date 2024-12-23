@@ -11,9 +11,7 @@ export const ChatMessagesList: React.FC = () => {
     const ref = useRef<HTMLDivElement>(null);
 
     const active = useSelector<RootState>((state) => state.active) as RootState["active"];
-    const chatMessages = useSelector<RootState>((state) => state.messages) as RootState["messages"]
-
-    
+    const chatMessages = useSelector<RootState>((state) => state.messages) as RootState["messages"];
 
     // Scroll to bottom on new messages or chat change
     useEffect(() => {
@@ -40,11 +38,9 @@ export const ChatMessagesList: React.FC = () => {
 
     return (
         <div ref={ref} className="flex flex-col flex-1 h-full  w-full overflow-y-scroll relative">
-            
-            {
-                (chatMessages[active || ""] ?? []).map((message, idx) => (
-                    <ChatMessageItem key={message.id} idx={idx} />
-                ))}
+            {(chatMessages[active || ""] ?? []).map((message, idx) => (
+                <ChatMessageItem key={message.id} idx={idx} />
+            ))}
         </div>
     );
 };
