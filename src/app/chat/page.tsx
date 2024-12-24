@@ -12,6 +12,7 @@ import { api } from "~/trpc/react";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewMessage, AppDispatch, init, RootState } from "./ChatState/store";
 import { useSession } from "next-auth/react";
+import { LoadingSpinner } from "~/components/ui/loading";
 
 // Initialize Pusher
 Pusher.logToConsole = true;
@@ -22,6 +23,7 @@ export default function ChatPage() {
     const active = useSelector<RootState>((state) => state.active) as RootState["active"];
     const chats = api.chat.getAll.useQuery();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    
 
     useEffect(() => {
         // Initialize Pusher
@@ -53,20 +55,15 @@ export default function ChatPage() {
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
+    const loading = useSelector<RootState>(state => state.state) as RootState["state"]
 
     return (
         <>
-            <button
-                onClick={toggleSidebar}
-                className="fixed top-4 left-4 z-50 md:hidden"
-                aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
-            >
-                <Menu size={24} />
-            </button>
+
 
             <main className="flex-1 flex h-full w-full overflow-hidden">
-                <ChatSidebar isOpen={isSidebarOpen} onCloseSidebar={toggleSidebar} />
-
+                {loading == "loading" && <LoadingSpinner />}
+                {loading == "idel" && 
                 <div className="flex flex-col flex-1 w-full overflow-hidden">
                     {active && (
                         <>
@@ -80,7 +77,7 @@ export default function ChatPage() {
                             <ChatInput onSendMessage={() => {}} />
                         </>
                     )}
-                </div>
+                </div>}
             </main>
         </>
     );

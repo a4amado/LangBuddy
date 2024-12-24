@@ -31,9 +31,11 @@ export const ChatMessagesList: React.FC = () => {
             return scrollHeight - scrollTop - clientHeight <= clientHeight / 3;
         };
 
-        if (shouldScrollToBottom()) {
-            scrollToBottom();
-        }
+        // if (shouldScrollToBottom()) {
+        //     scrollToBottom();
+        // }
+        scrollToBottom();
+
     }, [active, chatMessages]);
 
     return (

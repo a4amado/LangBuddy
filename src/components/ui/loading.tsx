@@ -8,7 +8,7 @@ export function LoadingSpinner() {
 
 export function LoadingPage() {
     return (
-        <div className="flex h-screen justify-center items-center">
+        <div className="flex h-screen align-middle justify-center items-center">
             <LoadingSpinner />
         </div>
     );

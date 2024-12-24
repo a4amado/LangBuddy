@@ -32,7 +32,7 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ idx }) => {
     const isCurrentUser = message[idx]?.senderId === session?.user.id;
 
     return (
-        <div className="flex w-full px-4 mb-2">
+        <div className="flex w-full px-4 mb-2 mx-3">
             <div
                 className={`flex w-full  align-middle ${isCurrentUser ? "justify-end" : "justify-start"}`}
             >
@@ -40,7 +40,7 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ idx }) => {
                     <Avatar
                         alt={message[idx]?.sender?.name ?? ""}
                         src={`${message[idx]?.sender?.image}`}
-                        className="w-6 m-3  h-6 aspect-square object-contain"
+                        className="w-6 m-3 min-w-6   h-6 aspect-square object-contain"
                     />
                 )}
                 <p

@@ -11,8 +11,11 @@ import { countryCodes, countryCodeToName } from "~/data/countries";
 import Flag from "react-world-flags";
 import { useRouter } from "next/navigation";
 import PageWrapper from "../_components/page-wrapper";
+import { useProtected } from "~/hooks/useProtected";
 
 export default function HomePage() {
+
+    useProtected()
     const { data: session } = useSession();
     const router = useRouter();
 
@@ -38,7 +41,7 @@ export default function HomePage() {
     // Create chat mutation
     const { mutate: createChat } = api.chat.create.useMutation({
         onSuccess: (data) => {
-            router.push(`/chat/${data.id}`);
+            router.push(`/chat?id=${data.id}`);
         },
     });
 
@@ -65,7 +68,7 @@ export default function HomePage() {
 
     return (
         <PageWrapper>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="max-w-7xl h-full overflow-y-auto mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {/* Header */}
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold text-gray-900">Find Language Partners</h1>
