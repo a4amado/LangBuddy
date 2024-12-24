@@ -57,7 +57,7 @@ export default function HomePage() {
 
     const handleStartChat = (userId: string) => {
         if (!session) {
-            router.push("/auth/signin");
+            router.push("/api/auth/signin");
             return;
         }
         createChat({ userId });

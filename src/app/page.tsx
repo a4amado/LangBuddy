@@ -7,7 +7,7 @@ export default async function HomePage() {
     console.log(session);
 
     if (!session?.user) {
-        redirect("/auth/signin");
+        redirect("/api/auth/signin");
     }
 
     if (!session.user.isBoarded) {
