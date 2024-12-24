@@ -41,7 +41,7 @@ export default function HomePage() {
     // Create chat mutation
     const { mutate: createChat } = api.chat.create.useMutation({
         onSuccess: (data) => {
-            router.push(`/chat?id=${data.id}`);
+            location.push(`/chat?id=${data.id}`);
         },
     });
 
