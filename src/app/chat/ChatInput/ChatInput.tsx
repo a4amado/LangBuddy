@@ -29,12 +29,12 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
             setMessage("");
         }
     }, [message, sendMessage, session?.user?.id]);
-    const chat = chats.find(chat => chat.id == active)
-    const user = useSession()
+    const chat = chats.find((chat) => chat.id == active);
+    const user = useSession();
     const otherUser = chat?.members.find((member) => member.id != user.data?.user.id) ?? {
         id: "deleted",
-        image:"/delete-user.webp",
-        name: "Deleted User"
+        image: "/delete-user.webp",
+        name: "Deleted User",
     };
     const handleKeyPress = useCallback(
         (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -44,8 +44,8 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
         },
         [handleSendMessage],
     );
-    const disabled = otherUser.id == "deleted" 
-    const text = disabled ? "This user deleted his Account, you can't messege him/her" : message
+    const disabled = otherUser.id == "deleted";
+    const text = disabled ? "This user deleted his Account, you can't messege him/her" : message;
     return (
         <div className="p-4 border-t bg-white flex items-center">
             <input

@@ -14,8 +14,7 @@ import PageWrapper from "../_components/page-wrapper";
 import { useProtected } from "~/hooks/useProtected";
 
 export default function HomePage() {
-
-    useProtected()
+    useProtected();
     const { data: session } = useSession();
     const router = useRouter();
 
@@ -41,7 +40,7 @@ export default function HomePage() {
     // Create chat mutation
     const { mutate: createChat } = api.chat.create.useMutation({
         onSuccess: (data) => {
-            location.push(`/chat?id=${data.id}`);
+            router.push(`/chat?id=${data.id}`);
         },
     });
 

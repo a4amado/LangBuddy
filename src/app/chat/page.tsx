@@ -23,7 +23,6 @@ export default function ChatPage() {
     const active = useSelector<RootState>((state) => state.active) as RootState["active"];
     const chats = api.chat.getAll.useQuery();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    
 
     useEffect(() => {
         // Initialize Pusher
@@ -55,29 +54,28 @@ export default function ChatPage() {
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
-    const loading = useSelector<RootState>(state => state.state) as RootState["state"]
+    const loading = useSelector<RootState>((state) => state.state) as RootState["state"];
 
     return (
         <>
-
-
             <main className="flex-1 flex h-full w-full overflow-hidden">
                 {loading == "loading" && <LoadingSpinner />}
-                {loading == "idel" && 
-                <div className="flex flex-col flex-1 w-full overflow-hidden">
-                    {active && (
-                        <>
-                            <ChatHeader
-                                chatId={active}
-                                onSettingsClick={() => console.log("Settings clicked")}
-                            />
-                            <div className="flex-1 overflow-hidden">
-                                <ChatMessagesList />
-                            </div>
-                            <ChatInput onSendMessage={() => {}} />
-                        </>
-                    )}
-                </div>}
+                {loading == "idel" && (
+                    <div className="flex flex-col flex-1 w-full overflow-hidden">
+                        {active && (
+                            <>
+                                <ChatHeader
+                                    chatId={active}
+                                    onSettingsClick={() => console.log("Settings clicked")}
+                                />
+                                <div className="flex-1 overflow-hidden">
+                                    <ChatMessagesList />
+                                </div>
+                                <ChatInput onSendMessage={() => {}} />
+                            </>
+                        )}
+                    </div>
+                )}
             </main>
         </>
     );

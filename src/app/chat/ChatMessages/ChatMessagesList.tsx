@@ -35,7 +35,6 @@ export const ChatMessagesList: React.FC = () => {
         //     scrollToBottom();
         // }
         scrollToBottom();
-
     }, [active, chatMessages]);
 
     return (

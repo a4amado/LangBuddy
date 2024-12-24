@@ -3,10 +3,10 @@ import { redirect } from "next/navigation";
 import { useEffect } from "react";
 
 export function useProtected() {
-    const session = useSession()
+    const session = useSession();
     useEffect(() => {
         if (session.status === "unauthenticated") {
-            redirect("/home")
+            redirect("/home");
         }
-    }, [session.status])
+    }, [session.status]);
 }

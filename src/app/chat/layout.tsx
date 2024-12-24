@@ -19,7 +19,6 @@ export default function ChatLayout({
     return (
         <PageWrapper>
             <Provider store={store}>
-                 
                 <div className="h-full flex relative">
                     {/* Mobile Menu Button */}
                     <button
@@ -50,9 +49,7 @@ export default function ChatLayout({
                     </div>
 
                     {/* Main Chat Area */}
-                    <div className="flex-1 h-full overflow-hidden">
-                        {children}
-                    </div>
+                    <div className="flex-1 h-full overflow-hidden">{children}</div>
 
                     {/* Overlay for mobile */}
                     {isSidebarOpen && (

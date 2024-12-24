@@ -17,8 +17,8 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({ onSettingsClick }) => {
     const session = useSession();
     const otherUser = curruntChat?.members.find((member) => member.id != session.data?.user.id) ?? {
         id: "delete",
-        image:"/delete-user.webp",
-        name: "Deleted User"
+        image: "/delete-user.webp",
+        name: "Deleted User",
     };
 
     return (
@@ -29,7 +29,6 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({ onSettingsClick }) => {
                     src={otherUser?.image || ""}
                     width={25}
                     height={25}
-                    
                     alt={"user img"}
                 />
                 <h3 className="text-lg font-semibold" data-user-id={otherUser?.id}>

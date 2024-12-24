@@ -44,8 +44,8 @@ const ChatSidebarBodyItem: React.FC<ChatSidebarBodyItemProps> = React.memo(({ id
     const activeChat = active == id;
     const otherUser = chats[idx]?.members.find((member) => member.id != user.data?.user.id) ?? {
         id: "delete",
-        image:"/delete-user.webp",
-        name: "Deleted User"
+        image: "/delete-user.webp",
+        name: "Deleted User",
     };
     return (
         <div
@@ -59,15 +59,17 @@ const ChatSidebarBodyItem: React.FC<ChatSidebarBodyItemProps> = React.memo(({ id
                 dispatch(switchChat({ id }));
             }}
         >
-                   <div className="flex">  <Image
-                                className="rounded-lg"
-                                src={otherUser?.image || ""}
-                                width={25}
-                                height={25}
-                                
-                                alt={"user img"}
-                            />
-            <h3 className="font-semibold">{otherUser.name}</h3></div>
+            <div className="flex">
+                {" "}
+                <Image
+                    className="rounded-lg"
+                    src={otherUser?.image || ""}
+                    width={25}
+                    height={25}
+                    alt={"user img"}
+                />
+                <h3 className="font-semibold">{otherUser.name}</h3>
+            </div>
             <p className="text-sm text-gray-600 truncate">
                 {chats[idx]?.lastMessage?.content ?? "No messages yet"}
             </p>

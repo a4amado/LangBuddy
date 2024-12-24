@@ -7,12 +7,10 @@ interface ChatSidebarProps {
     onCloseSidebar: () => void;
 }
 
-export const ChatSidebar: React.FC = ( ) => {
+export const ChatSidebar: React.FC = () => {
     return (
         <div className={` h-full overflow-hidden`}>
-            
-                <ChatSidebarBody />
-            
+            <ChatSidebarBody />
         </div>
     );
 };

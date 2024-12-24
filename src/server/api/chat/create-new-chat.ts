@@ -1,59 +1,74 @@
 import { z } from "zod";
 
-export const schema$createNewChat = z.object({
-    userId: z.string().cuid(),
-});
 import { db } from "~/server/db";
+import { protectedProcedure } from "../trpc";
+import { ChatType, LanguageRank } from "@prisma/client";
 
 // Since zod is not available, we'll use TypeScript types instead
-type CreateNewChatInput = {
-    userId: string;
-    user2Id: string;
-};
 
-export async function createNewChat({ userId, user2Id }: CreateNewChatInput) {
-    // Check if a chat between these users already exists
-    const existingChat = await db.chat.findFirst({
-        where: {
-            AND: [
-                {
+export const createChat = protectedProcedure
+    .input(
+        z.object({
+            userId: z.string().cuid(),
+            type: z.union([z.literal(ChatType.DIRECT), z.literal(ChatType.GROUP)]),
+        }),
+    )
+    .mutation(async ({ ctx, input }) => {
+        if (input.type === "DIRECT") {
+            const existingChat = await db.chat.findFirst({
+                where: {
+                    type: "DIRECT",
                     members: {
-                        some: {
-                            userId: userId,
+                        every: {
+                            userId: {
+                                in: [ctx.session.user.id, input.userId],
+                            },
                         },
                     },
                 },
-                {
+                include: {
                     members: {
-                        some: {
-                            userId: user2Id,
+                        include: {
+                            user: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    image: true,
+                                },
+                            },
                         },
                     },
                 },
-                {
-                    type: "DIRECT", // Ensure it's a direct chat, not a group
+            });
+
+            if (existingChat) return existingChat;
+        }
+
+        return db.chat.create({
+            data: {
+                type: input.type,
+
+                members: {
+                    createMany: {
+                        data:
+                            input.type === "DIRECT"
+                                ? [{ userId: ctx.session.user.id }, { userId: input.userId }]
+                                : [{ userId: ctx.session.user.id }],
+                    },
                 },
-            ],
-        },
-    });
-    if (existingChat) {
-        return { chat_id: existingChat.id };
-    }
-
-    // Create new chat and members in a transaction to ensure data consistency
-    const result = await db.$transaction(async (tx) => {
-        const newChat = await tx.chat.create({ data: {}, select: { id: true } });
-        console.log(newChat);
-
-        await tx.chatMember.createMany({
-            data: [
-                { chatId: newChat.id, userId: userId },
-                { chatId: newChat.id, userId: user2Id },
-            ],
+            },
+            include: {
+                members: {
+                    include: {
+                        user: {
+                            select: {
+                                id: true,
+                                name: true,
+                                image: true,
+                            },
+                        },
+                    },
+                },
+            },
         });
-
-        return { chat_id: newChat.id };
     });
-
-    return result;
-}

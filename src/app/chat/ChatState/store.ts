@@ -3,9 +3,9 @@ import { configureStore, createAsyncThunk, createSlice, PayloadAction } from "@r
 import type { AppRouter } from "~/server/api/root";
 type AppOutput = inferRouterOutputs<AppRouter>;
 
-type State = "loading" | "idel"
-const initialState: AppOutput["chat"]["getAll"] & { state: State} = {
-    state: "loading" ,
+type State = "loading" | "idel";
+const initialState: AppOutput["chat"]["getAll"] & { state: State } = {
+    state: "loading",
     chats: [],
     messages: {},
     active: "",
@@ -16,7 +16,6 @@ const chatSlice = createSlice({
     name: "chats",
     reducers: {
         init: (state, action: PayloadAction<AppOutput["chat"]["getAll"]>) => {
-            
             state.active = action.payload.chats[0]?.id || "";
             state.chats = action.payload.chats;
 

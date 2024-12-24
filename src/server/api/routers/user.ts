@@ -138,7 +138,6 @@ export const userRouter = createTRPCRouter({
             });
             if (users.length == 0) {
                 const ss = await ctx.db.user.findMany({
-                    
                     include: {
                         profile: {
                             select: {
@@ -151,10 +150,10 @@ export const userRouter = createTRPCRouter({
                     take: input.take,
                     skip: input.skip,
                     orderBy: {
-                        lastSeen: "desc"
-                    }
-                }); 
-                return ss
+                        lastSeen: "desc",
+                    },
+                });
+                return ss;
             }
 
             return users;
