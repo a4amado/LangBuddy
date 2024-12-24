@@ -35,12 +35,6 @@ export default function HomePage() {
         },
     );
 
-    // Recommended users query
-    const { data: recommendedUsers, isLoading: isLoadingRecommended } =
-        api.user.getRecommended.useQuery(undefined, {
-            enabled: debouncedSearch === "" && selectedLanguages === "" && selectedCountry === "",
-        });
-
     // Create chat mutation
     const { mutate: createChat } = api.chat.create.useMutation({
         onSuccess: (data) => {
@@ -58,8 +52,8 @@ export default function HomePage() {
     }, [searchQuery]);
 
     // Determine which users to display
-    const displayUsers = searchResults ?? recommendedUsers ?? [];
-    const isLoading = isLoadingSearch || isLoadingRecommended;
+    const displayUsers = searchResults ?? [];
+    const isLoading = isLoadingSearch;
 
     const handleStartChat = (userId: string) => {
         if (!session) {

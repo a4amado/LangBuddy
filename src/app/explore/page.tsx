@@ -149,6 +149,7 @@ export default function PostPage() {
                     {post?.data?.items?.map((post) => (
                         <Post
                             key={post.id}
+                            slug={post.slug}
                             author={{
                                 id: post.createdBy?.id || "deleted",
                                 image: post.createdBy?.image || "deleted",

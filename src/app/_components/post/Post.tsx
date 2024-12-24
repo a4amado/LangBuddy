@@ -28,6 +28,7 @@ interface PostProps {
     commentCount: number;
     userVote?: "up" | "down" | null;
     isBookmarked?: boolean;
+    slug: string;
     onVote: (postId: string, voteType: "up" | "down") => void;
     onBookmark: (postId: string) => void;
     onShare: (postId: string) => void;
@@ -45,6 +46,7 @@ export default function Post({
     commentCount,
     userVote,
     isBookmarked = false,
+    slug,
     onVote,
     onBookmark,
     onShare,
@@ -107,7 +109,7 @@ export default function Post({
             </div>
 
             {/* Post Content */}
-            <Link href={`/post/${id}`} className="block mb-4">
+            <Link href={`/posts/${slug}`} className="block mb-4">
                 <h2 className="text-xl font-semibold text-gray-900 mb-2">{title}</h2>
                 <div className={`text-gray-700 ${!isExpanded && "line-clamp-3"}`}>{content}</div>
                 {content.length > 150 && !isExpanded && (
@@ -151,13 +153,10 @@ export default function Post({
                 </div>
 
                 {/* Comments */}
-                <button
-                    onClick={() => onComment(id)}
-                    className="flex items-center space-x-2 text-gray-500 hover:text-gray-700"
-                >
+                <Link href={`/posts/${slug}`} className="flex space-x-2 items-center mb-4">
                     <MessageSquare size={20} />
                     <span>{commentCount} Comments</span>
-                </button>
+                </Link>
 
                 {/* Share */}
                 <button

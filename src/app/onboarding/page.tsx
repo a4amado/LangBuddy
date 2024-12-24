@@ -48,7 +48,7 @@ export default function Onboarding() {
     });
     const session = useSession();
     useEffect(() => {
-        if (session.status == "authenticated" && session.data.user.boarded) {
+        if (session.status == "authenticated" && session.data.user.isBoarded) {
             location.replace("/");
         }
     }, [session]);

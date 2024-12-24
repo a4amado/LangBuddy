@@ -9,19 +9,19 @@ export const schema$getPaginatedChats = z.object({
 export async function getPaginatedChats(userId: string, offset: number, limit: number) {
     return await db.chat.findMany({
         where: {
-            ChatMember: {
-                some: { user_id: userId },
+            members: {
+                some: { userId: userId },
             },
         },
         orderBy: {
-            lastMessege: { createdAt: "desc" },
+            lastMessage: { createdAt: "desc" },
         },
         skip: offset,
         take: limit,
         include: {
-            ChatMember: true,
-            lastMessege: true,
-            ChatMessege: {
+            members: true,
+            lastMessage: true,
+            messages: {
                 orderBy: { createdAt: "desc" },
                 take: 100,
                 include: {

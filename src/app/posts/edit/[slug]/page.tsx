@@ -9,9 +9,9 @@ import PageWrapper from "~/app/_components/page-wrapper";
 export default function EditPost() {
     const router = useRouter();
     const [form] = Form.useForm();
-    const { postId } = useParams<{ postId: string }>();
+    const { slug } = useParams<{ slug: string }>();
 
-    const { data: post, isLoading } = api.post.view.useQuery({ postId: postId });
+    const { data: post, isLoading } = api.post.getBySlug.useQuery({ slug: slug });
 
     const editPost = api.post.edit.useMutation({
         onSuccess: () => {
@@ -31,7 +31,7 @@ export default function EditPost() {
 
     const onFinish = (values: { title: string; content: string }) => {
         editPost.mutate({
-            postId: postId,
+            id: post?.id ?? "",
             ...values,
         });
     };

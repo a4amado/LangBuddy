@@ -4,14 +4,14 @@ export async function getSingleChat(chatId: string, userId: string) {
     return await db.chat.findFirst({
         where: {
             id: chatId,
-            ChatMember: {
-                some: { user_id: userId },
+            members: {
+                some: { userId: userId },
             },
         },
         include: {
-            ChatMember: true,
-            lastMessege: true,
-            ChatMessege: {
+            members: true,
+            lastMessage: true,
+            messages: {
                 orderBy: { createdAt: "desc" },
                 take: 100,
                 include: {

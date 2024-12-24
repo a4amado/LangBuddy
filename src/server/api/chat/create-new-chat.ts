@@ -17,21 +17,21 @@ export async function createNewChat({ userId, user2Id }: CreateNewChatInput) {
         where: {
             AND: [
                 {
-                    ChatMember: {
+                    members: {
                         some: {
-                            user_id: userId,
+                            userId: userId,
                         },
                     },
                 },
                 {
-                    ChatMember: {
+                    members: {
                         some: {
-                            user_id: user2Id,
+                            userId: user2Id,
                         },
                     },
                 },
                 {
-                    type: "CHAT", // Ensure it's a direct chat, not a group
+                    type: "DIRECT", // Ensure it's a direct chat, not a group
                 },
             ],
         },
@@ -47,8 +47,8 @@ export async function createNewChat({ userId, user2Id }: CreateNewChatInput) {
 
         await tx.chatMember.createMany({
             data: [
-                { chat_id: newChat.id, user_id: userId },
-                { chat_id: newChat.id, user_id: user2Id },
+                { chatId: newChat.id, userId: userId },
+                { chatId: newChat.id, userId: user2Id },
             ],
         });
 

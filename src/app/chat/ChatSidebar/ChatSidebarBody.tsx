@@ -6,6 +6,7 @@ import { api } from "~/trpc/react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState, switchChat } from "../ChatState/store";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 export const ChatSidebarBody: React.FC = () => {
     const chats = useSelector<RootState>((state) => state.chats) as RootState["chats"];
@@ -41,10 +42,11 @@ const ChatSidebarBodyItem: React.FC<ChatSidebarBodyItemProps> = React.memo(({ id
     const chats = useSelector<RootState>((state) => state.chats) as RootState["chats"];
     const active = useSelector<RootState>((state) => state.active) as RootState["active"];
     const activeChat = active == id;
-    const otherUSer =
-        chats[idx]?.members[0]?.id != user.data?.user.id
-            ? chats[idx]?.members[0]?.name
-            : chats[idx]?.members[1]?.name;
+    const otherUser = chats[idx]?.members.find((member) => member.id != user.data?.user.id) ?? {
+        id: "delete",
+        image:"/delete-user.webp",
+        name: "Deleted User"
+    };
     return (
         <div
             className={`p-3 mb-2 rounded cursor-pointer ${
@@ -57,7 +59,15 @@ const ChatSidebarBodyItem: React.FC<ChatSidebarBodyItemProps> = React.memo(({ id
                 dispatch(switchChat({ id }));
             }}
         >
-            <h3 className="font-semibold">{otherUSer}</h3>
+                   <div className="flex">  <Image
+                                className="rounded-lg"
+                                src={otherUser?.image || ""}
+                                width={25}
+                                height={25}
+                                
+                                alt={"user img"}
+                            />
+            <h3 className="font-semibold">{otherUser.name}</h3></div>
             <p className="text-sm text-gray-600 truncate">
                 {chats[idx]?.lastMessage?.content ?? "No messages yet"}
             </p>

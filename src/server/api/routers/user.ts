@@ -136,6 +136,26 @@ export const userRouter = createTRPCRouter({
                 take: input.take,
                 skip: input.skip,
             });
+            if (!users) {
+                const users = await ctx.db.user.findMany({
+                    
+                    include: {
+                        profile: {
+                            select: {
+                                bio: true,
+                                hobbies: true,
+                            },
+                        },
+                        languages: { select: { language: true, rank: true } },
+                    },
+                    take: input.take,
+                    skip: input.skip,
+                    orderBy: {
+                        lastSeen: "desc"
+                    }
+                }); 
+                return users
+            }
 
             return users;
         }),

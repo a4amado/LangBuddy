@@ -3,18 +3,18 @@ import { db } from "~/server/db";
 export async function getgetAll(userId: string) {
     const chats = await db.chat.findMany({
         where: {
-            ChatMember: {
+            members: {
                 some: {
-                    user_id: userId,
+                    userId: userId,
                 },
             },
         },
         orderBy: {
-            lastMessege: { createdAt: "desc" },
+            lastMessage: { createdAt: "desc" },
         },
         take: 100,
         include: {
-            ChatMember: {
+            members: {
                 select: {
                     user: {
                         select: {
@@ -25,7 +25,7 @@ export async function getgetAll(userId: string) {
                     },
                 },
             },
-            lastMessege: {
+            lastMessage: {
                 include: {
                     sender: {
                         select: {
@@ -36,7 +36,7 @@ export async function getgetAll(userId: string) {
                     },
                 },
             },
-            ChatMessege: {
+            messages: {
                 orderBy: { createdAt: "asc" },
                 take: 100,
                 include: {
@@ -57,10 +57,10 @@ export async function getgetAll(userId: string) {
     const state = {
         chats: chats.map((chat) => {
             // Create a new object without ChatMessage
-            const { ChatMessege, ...chatWithoutMessages } = chat;
+            const { messages, ...chatWithoutMessages } = chat;
             return chatWithoutMessages;
         }),
-        messages: {} as Record<string, ChatType[number]["ChatMessege"]>,
+        messages: {} as Record<string, ChatType[number]["messages"]>,
         state: "idel",
         active: "",
     };
@@ -68,7 +68,7 @@ export async function getgetAll(userId: string) {
     // Populate messages separately
     chats.forEach((chat) => {
         if (chat.id) {
-            state.messages[chat.id] = chat.ChatMessege;
+            state.messages[chat.id] = chat.messages;
         }
     });
 

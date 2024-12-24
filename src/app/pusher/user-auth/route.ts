@@ -1,16 +1,19 @@
-import { NextApiHandler } from "next";
+import { NextRequest, NextResponse } from "next/server";
 import { auth } from "~/server/auth";
 import { pusher } from "~/server/pusher/client";
 
-export const POST: NextApiHandler = async (req, res) => {
+export async function POST(request: NextRequest) {
     const user = await auth();
     if (!user?.user?.id) {
-        res.status(405).end();
+        return new NextResponse(null, { status: 405 });
     }
-    const socketId = req.body.socket_id;
+
+    const body = await request.json();
+    const socketId = body.socket_id;
 
     const authResponse = pusher.authenticateUser(socketId, {
-        id: user?.user?.id ?? "",
+        id: user.user.id,
     });
-    res.send(authResponse);
-};
+
+    return NextResponse.json(authResponse);
+}

@@ -27,7 +27,7 @@ export function PostFeed() {
         return <LoadingSpinner />;
     }
 
-    if (!data?.pages || !data?.pages[0].items.length) {
+    if (!data?.pages || !data?.pages[0]?.items?.length) {
         return (
             <div className="flex flex-col items-center justify-center gap-2 py-12">
                 <h3 className="text-2xl font-semibold">No posts yet</h3>
@@ -39,7 +39,14 @@ export function PostFeed() {
     return (
         <div className="flex flex-col gap-4">
             {data.pages.map((page) =>
-                page.items.map((post) => <PostCard key={post.id} post={post} />),
+                page.items.map((post) => <PostCard key={post.id} post={{
+                    ...post,
+                    author: {
+                        id: post?.createdBy?.id ?? "deleted",
+                        name: post?.createdBy?.name ?? "[Deleted]",
+                        image: post?.createdBy?.image?? "/deleted-user.webp",
+                    }
+                }} />),
             )}
 
             {hasNextPage && (

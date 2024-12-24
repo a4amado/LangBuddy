@@ -2,40 +2,14 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { db } from "~/server/db";
 
+import { createPost } from "../post/create-post";
+import { deletePost } from "../post/delete-post";
+import { getPostBySlug } from "../post/get-post-by-slug";
+import { updatePost } from "../post/edit-post";
 export const postRouter = createTRPCRouter({
-    create: protectedProcedure
-        .input(
-            z.object({
-                title: z.string().min(1).max(100),
-                content: z.string().min(1).max(500),
-            }),
-        )
-        .mutation(async ({ ctx, input }) => {
-            return db.post.create({
-                data: {
-                    title: input.title,
-                    content: input.content,
-
-                    createdById: ctx.session.user.id,
-                },
-            });
-        }),
-
-    delete: protectedProcedure
-        .input(z.object({ id: z.string() }))
-        .mutation(async ({ ctx, input }) => {
-            const post = await db.post.findUnique({
-                where: { id: input.id },
-            });
-
-            if (!post || post.createdById !== ctx.session.user.id) {
-                throw new Error("Not authorized");
-            }
-
-            return db.post.delete({
-                where: { id: input.id },
-            });
-        }),
+    create: createPost,
+    delete: deletePost,
+    edit: updatePost,
 
     getInfinitePosts: publicProcedure
         .input(
@@ -73,4 +47,5 @@ export const postRouter = createTRPCRouter({
                 nextCursor,
             };
         }),
+    getBySlug: getPostBySlug,
 });

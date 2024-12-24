@@ -6,7 +6,7 @@ export default function useProtected() {
     useEffect(() => {
         if (session.status == "unauthenticated") location.replace("/api/auth/signin");
         if (session.status == "authenticated") {
-            if (!session.data.user.boarded) location.replace("/onboarding");
+            if (!session.data.user.isBoarded) location.replace("/onboarding");
         }
-    }, [session.status, session?.data?.user?.boarded]);
+    }, [session.status, session?.data?.user?.isBoarded]);
 }

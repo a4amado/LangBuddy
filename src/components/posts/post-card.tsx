@@ -7,14 +7,18 @@ import { formatRelativeTime } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
 interface PostWithAuthor extends Post {
-    author: User | null;
+    author:{
+        id:string,
+        name: string,
+        image:string
+    }
 }
 
 interface PostCardProps {
     post: PostWithAuthor;
 }
 
-export function PostCard({ post }: PostCardProps) {
+export function PostCard({ post  }: PostCardProps) {
     const utils = api.useUtils();
 
     return (

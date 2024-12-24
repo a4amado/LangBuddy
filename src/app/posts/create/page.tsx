@@ -9,7 +9,7 @@ export default function CreatePost() {
     const router = useRouter();
     const createPost = api.post.create.useMutation({
         onSuccess: (data) => {
-            router.push(`/posts/${data.post_id}`);
+            router.push(`/posts/${data.slug}`);
             router.refresh();
         },
     });

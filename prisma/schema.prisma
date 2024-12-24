@@ -9,12 +9,17 @@ datasource db {
 
 model Post {
     id          String    @id @default(cuid())
+
     title       String
+    slug       String @unique
     content     String
     createdAt   DateTime  @default(now())
     updatedAt   DateTime  @updatedAt
     createdBy   User?     @relation(fields: [createdById], references: [id], onDelete: SetNull)
     createdById String?
+
+    @@index([slug])
+    Comment Comment[]
 }
 
 model Account {
@@ -80,6 +85,8 @@ model User {
     profile       Profile?
     authSessions  AuthSession[]
     authKeys      AuthKey[]
+
+    Comment Comment[]
 }
 
 model VerificationToken {
@@ -147,9 +154,8 @@ model ChatMember {
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     chat      Chat     @relation(fields: [chatId], references: [id])
 
-    @@unique([chatId, userId])
+    @@id([chatId, userId])  // Alternative approach using composite primary key
 }
-
 model AuthSession {
     id            String @id @unique
     userId        String
@@ -167,4 +173,19 @@ model AuthKey {
     user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@index([userId])
+}
+
+model Comment {
+    id String @id @default(cuid())
+    createdBy User? @relation(fields: [createdById], references: [id], onDelete: SetNull)
+    createdById String?
+
+
+    post Post @relation(fields: [postId], references: [id], onDelete: NoAction)
+    postId String
+
+    content String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
