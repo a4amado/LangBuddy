@@ -136,7 +136,7 @@ export const userRouter = createTRPCRouter({
                 take: input.take,
                 skip: input.skip,
             });
-            if (!users) {
+            if (users.length == 0) {
                 const ss = await ctx.db.user.findMany({
                     
                     include: {
