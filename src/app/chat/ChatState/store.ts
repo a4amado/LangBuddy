@@ -12,6 +12,9 @@ const initialState: AppOutput["chat"]["getAll"] & { state: State } = {
     active: "",
 };
 
+
+
+
 export const fetchNonExistingChat = createAsyncThunk(
     "chats/fetchNonExistingChat",
     async (action: PayloadAction<{ chat_id: string }>) => {
@@ -21,6 +24,7 @@ export const fetchNonExistingChat = createAsyncThunk(
         return new_chat;
     },
 );
+
 
 const chatSlice = createSlice({
     initialState,
@@ -61,6 +65,15 @@ const chatSlice = createSlice({
                 console.log(action.payload);
             }
         },
+        replaceMessege: (state, action: PayloadAction<{ chatId:string, messegeId:string, replaceWith:AppOutput["messege"]["send"] }>) => {
+            const idx = state.messages[action.payload.chatId]?.findIndex(message => message.id == action.payload.messegeId) as number
+            console.log("before", state.messages[action.payload.chatId]);
+            
+            // @ts-ignore
+            state.messages[action?.payload?.chatId][idx] = action.payload.replaceWith
+            
+            console.log("after", state.messages[action.payload.chatId]);
+        }
     },
     extraReducers(builder) {
         builder.addCase(
@@ -101,4 +114,4 @@ export const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
-export const { init, switch: switchChat, addNewMessage } = chatSlice.actions;
+export const { init, switch: switchChat, addNewMessage, replaceMessege } = chatSlice.actions;

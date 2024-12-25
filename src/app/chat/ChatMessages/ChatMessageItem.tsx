@@ -1,10 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { useSession } from "next-auth/react";
 import { RootState } from "../ChatState/store";
 import { useSelector } from "react-redux";
 import { Avatar } from "antd";
+import { isCuid } from "~/utils/is_cuid";
+import { LoaderIcon } from "lucide-react";
 
 interface ChatMessageItemProps {
     idx: number;
@@ -29,8 +31,12 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ idx }) => {
         return null;
     }
 
-    const isCurrentUser = message[idx]?.senderId === session?.user.id;
 
+    const isCurrentUser = message[idx]?.senderId === session?.user.id;
+    // const loading = useMemo(() => {
+    //     return !isCuid(message[idx]?.id)
+
+    // }, [message[idx]?.id])
     return (
         <div className="flex w-full px-4 mb-2 mx-3">
             <div
@@ -56,6 +62,7 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ idx }) => {
             shadow-sm
           `}
                 >
+                    {isCuid(message[idx]?.id)}
                     <span>{message[idx]?.content}</span>
                 </p>
             </div>

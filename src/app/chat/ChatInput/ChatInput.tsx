@@ -6,7 +6,7 @@ import { Send } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { api } from "~/trpc/react";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewMessage, AppDispatch, RootState } from "../ChatState/store";
+import { addNewMessage, AppDispatch, replaceMessege, RootState } from "../ChatState/store";
 
 interface ChatInputProps {
     onSendMessage: (message: string) => void;
@@ -16,16 +16,36 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
     const [message, setMessage] = useState("");
     const { data: session } = useSession();
     const dispatch = useDispatch<AppDispatch>();
-    const { mutate: sendMessage } = api.messege.send.useMutation({
-        onSuccess(data) {
-            dispatch(addNewMessage(data));
-        },
-    });
+    const { mutate: sendMessage } = api.messege.send.useMutation();
     const active = useSelector<RootState>((state) => state.active) as RootState["active"];
     const chats = useSelector<RootState>((state) => state.chats) as RootState["chats"];
     const handleSendMessage = useCallback(() => {
         if (message.trim() && session?.user?.id) {
-            sendMessage({ content: message, chatId: active || "" });
+            const mesage_temp_id = Math.random().toString()
+            dispatch(addNewMessage({
+                chatId: active,
+                createdAt: new Date(),
+                content: message,
+                id: mesage_temp_id,
+                sender: {
+                    id: session.user.id,
+                    name: session.user.name ?? "",
+                    image: session.user.image ?? "",
+                },
+                senderId: session.user.id,
+                updatedAt: new Date()
+            }));
+
+            sendMessage({ content: message, chatId: active || "" }, {
+                onSuccess(data) {
+                    dispatch(replaceMessege({
+                        chatId: active,
+                        messegeId: mesage_temp_id,
+                        replaceWith: data
+                    }));
+
+                },
+            });
             setMessage("");
         }
     }, [message, sendMessage, session?.user?.id]);
