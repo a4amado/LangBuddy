@@ -10,7 +10,7 @@ export const createChat = protectedProcedure
     .input(
         z.object({
             userId: z.string().cuid(),
-            type: z.union([z.literal(ChatType.DIRECT), z.literal(ChatType.GROUP)]),
+            type: z.enum([ChatType.DIRECT, ChatType.GROUP]).default("DIRECT"),
         }),
     )
     .mutation(async ({ ctx, input }) => {

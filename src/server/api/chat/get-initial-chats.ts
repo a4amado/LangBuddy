@@ -15,14 +15,8 @@ export async function getgetAll(userId: string) {
         take: 100,
         include: {
             members: {
-                select: {
-                    user: {
-                        select: {
-                            name: true,
-                            id: true,
-                            image: true,
-                        },
-                    },
+                include: {
+                    user: true,
                 },
             },
             lastMessage: {

@@ -1,6 +1,7 @@
-import { inferRouterOutputs } from "@trpc/server";
+import { inferRouterOutputs, TRPCError } from "@trpc/server";
 import { configureStore, createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { AppRouter } from "~/server/api/root";
+import { client } from "~/trpc/fetch";
 type AppOutput = inferRouterOutputs<AppRouter>;
 
 type State = "loading" | "idel";
@@ -10,6 +11,16 @@ const initialState: AppOutput["chat"]["getAll"] & { state: State } = {
     messages: {},
     active: "",
 };
+
+export const fetchNonExistingChat = createAsyncThunk(
+    "chats/fetchNonExistingChat",
+    async (action: PayloadAction<{ chat_id: string }>) => {
+        const new_chat = await client.chat.getChatById.query({ chatId: action.payload.chat_id });
+        console.log(new_chat);
+
+        return new_chat;
+    },
+);
 
 const chatSlice = createSlice({
     initialState,
@@ -50,6 +61,35 @@ const chatSlice = createSlice({
                 console.log(action.payload);
             }
         },
+    },
+    extraReducers(builder) {
+        builder.addCase(
+            fetchNonExistingChat.fulfilled,
+            (state, action: PayloadAction<AppOutput["chat"]["getChatById"]>) => {
+                // Early return if no payload
+                if (action.payload instanceof TRPCError) return;
+
+                console.log(action);
+
+                const payload = action.payload;
+
+                // Update messages
+                // @ts-ignore
+                state.messages[payload.id] = payload.messages;
+
+                // Update chats list - ensure no duplicates
+                const chatExists = state.chats.some((chat) => chat.id === payload.id);
+                if (!chatExists) {
+                    // @ts-ignore
+                    state.chats = [payload, ...state.chats];
+                }
+
+                // Set active chat
+                // @ts-ignore
+
+                state.active = payload.id;
+            },
+        );
     },
 });
 

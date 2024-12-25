@@ -123,5 +123,4 @@ export const chatRouter = createTRPCRouter({
         await pusher.trigger(`chat-${input.chatId}`, "new-message", message);
         return message;
     }),
-
 });

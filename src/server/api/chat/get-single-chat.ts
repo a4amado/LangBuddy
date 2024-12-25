@@ -21,18 +21,29 @@ export const getChatById = protectedProcedure
                 return new TRPCError({ code: "FORBIDDEN" });
             }
 
-            return await db.chat.findFirst({
+            const chat = await db.chat.findFirst({
                 where: {
                     id: input.chatId,
-                    members: {
-                        some: { userId: input.chatId },
-                    },
                 },
                 include: {
-                    members: true,
-                    lastMessage: true,
+                    members: {
+                        include: {
+                            user: true,
+                        },
+                    },
+                    lastMessage: {
+                        include: {
+                            sender: {
+                                select: {
+                                    name: true,
+                                    id: true,
+                                    image: true,
+                                },
+                            },
+                        },
+                    },
                     messages: {
-                        orderBy: { createdAt: "desc" },
+                        orderBy: { createdAt: "asc" },
                         take: 100,
                         include: {
                             sender: {
@@ -46,5 +57,13 @@ export const getChatById = protectedProcedure
                     },
                 },
             });
+            return {
+                ...chat,
+                members: chat?.members.map((e) => ({
+                    id: e.user.id,
+                    image: e.user.image,
+                    name: e.user.name,
+                })),
+            };
         },
     );

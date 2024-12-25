@@ -2,15 +2,20 @@
 
 import { useEffect, useState } from "react";
 import Pusher from "pusher-js";
-import { Menu } from "lucide-react";
 import { ChatHeader } from "./ChatHeader/ChatHeader";
 import { ChatInput } from "./ChatInput/ChatInput";
-import { ChatSidebar } from "./ChatSidebar/ChatSidebar";
+
 import { ChatMessagesList } from "./ChatMessages/ChatMessagesList";
 import { api } from "~/trpc/react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { addNewMessage, AppDispatch, init, RootState } from "./ChatState/store";
+import {
+    addNewMessage,
+    AppDispatch,
+    fetchNonExistingChat,
+    init,
+    RootState,
+} from "./ChatState/store";
 import { useSession } from "next-auth/react";
 import { LoadingSpinner } from "~/components/ui/loading";
 
@@ -21,6 +26,7 @@ export default function ChatPage() {
     const dispatch = useDispatch<AppDispatch>();
     const user = useSession();
     const active = useSelector<RootState>((state) => state.active) as RootState["active"];
+    const messeges = useSelector<RootState>((state) => state.messages) as RootState["messages"];
     const chats = api.chat.getAll.useQuery();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -35,7 +41,16 @@ export default function ChatPage() {
 
         // Bind to event
         channel.bind("new_msg", async function (data: any) {
-            dispatch(addNewMessage(data as any));
+            if (messeges[data.chatId]) {
+                console.log("new msg");
+
+                dispatch(addNewMessage(data as any));
+            } else {
+                console.log("fetch new chat");
+
+                // @ts-ignore
+                dispatch(fetchNonExistingChat({ payload: { chat_id: data.chatId } }));
+            }
         });
 
         // Initialize chats
@@ -65,7 +80,6 @@ export default function ChatPage() {
                         {active && (
                             <>
                                 <ChatHeader
-                                    chatId={active}
                                     onSettingsClick={() => console.log("Settings clicked")}
                                 />
                                 <div className="flex-1 overflow-hidden">
