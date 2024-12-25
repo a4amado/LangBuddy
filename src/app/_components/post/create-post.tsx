@@ -1,7 +1,8 @@
 "use client";
 
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, Modal } from "antd";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import PageWrapper from "~/app/_components/page-wrapper";
 import { api } from "~/trpc/react";
 
@@ -18,9 +19,12 @@ export default function CreatePost() {
         createPost.mutate(values);
     };
 
+    const [open, setOpen] = useState(false)
     return (
-        <PageWrapper>
-            <div className="h-full overflow-auto bg-white p-6">
+        <>
+            <div className="my-2">
+                <Input.TextArea className="text-lg" autoSize={{minRows:2, maxRows:2}}  role="button" onClick={() => setOpen(!open)} placeholder="Ask Somethig!" />
+            <Modal open={open}>            <div className="h-full overflow-auto bg-white p-6">
                 <div className="max-w-2xl mx-auto">
                     <h1 className="text-3xl font-bold text-gray-900 mb-8">Create New Post</h1>
 
@@ -70,7 +74,8 @@ export default function CreatePost() {
                         </div>
                     </Form>
                 </div>
+            </div></Modal>
             </div>
-        </PageWrapper>
+        </ >
     );
 }

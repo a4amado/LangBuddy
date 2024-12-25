@@ -3,6 +3,7 @@
 import { api } from "~/trpc/react";
 import PageWrapper from "../_components/page-wrapper";
 import Post from "../_components/post/Post";
+import CreatePost from "../_components/post/create-post";
 const mockPosts = [
     {
         id: "post-1",
@@ -146,6 +147,7 @@ export default function PostPage() {
         <PageWrapper>
             <div className="w-full  overflow-y-scroll h-full">
                 <div className="max-w-4xl  mx-auto h-full py-4">
+                    <CreatePost />
                     {post?.data?.items?.map((post) => (
                         <Post
                             key={post.id}

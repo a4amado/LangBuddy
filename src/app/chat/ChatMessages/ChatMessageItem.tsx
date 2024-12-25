@@ -38,7 +38,7 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ idx }) => {
 
     // }, [message[idx]?.id])
     return (
-        <div className="flex w-full px-4 mb-2 mx-3">
+        <div className="flex w-full px-4 mb-2 ">
             <div
                 className={`flex w-full  align-middle ${isCurrentUser ? "justify-end" : "justify-start"}`}
             >
@@ -52,7 +52,7 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ idx }) => {
                 <p
                     className={`
             relative
-            max-w-[90%]
+            max-w-[calc(90%)]
             sm:max-w-[80%]
             md:max-w-[70%]
             p-3
