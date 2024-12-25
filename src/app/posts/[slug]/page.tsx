@@ -3,11 +3,13 @@
 import { useParams, useRouter } from "next/navigation";
 import { api } from "~/trpc/react";
 import PageWrapper from "~/app/_components/page-wrapper";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { NewComment } from "~/app/_components/comment/new-comment";
 import Image from "next/image";
 import CommentSection from "~/app/_components/comment/comment";
+import { Button } from "antd";
 
+import { LogIn } from 'lucide-react';
 // Types
 interface Author {
     id?: string;
@@ -171,7 +173,17 @@ export default function ViewPost() {
                             />
 
                             <div className="mt-8 border-t border-gray-200 pt-8">
-                                <NewComment onAddComment={() => {}} postId={post.id} />
+                                {
+                                    session.status == "authenticated" && <NewComment onAddComment={() => {}} postId={post.id} />
+                                }
+                                
+                                {
+                                    session.status == "unauthenticated" && <Button onClick={() =>signIn("google", {
+                                        redirectTo: location.href
+                                    })} icon={<LogIn/>}>
+                                        Login To Comment
+                                    </Button>
+                                }
                             </div>
 
                             <CommentSection
