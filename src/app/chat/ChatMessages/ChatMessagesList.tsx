@@ -32,12 +32,12 @@ export const ChatMessagesList: React.FC = () => {
             ref={ref}
             data={chatMessages[active || ""]}
             alignToBottom
-            
+
             itemContent={(idx) => {
                 // @ts-ignore
                 return <ChatMessageItem key={chatMessages[active][idx]?.id ?? ""} idx={idx} />;
             }}
-            components={{ EmptyPlaceholder: () => <>Nothing yet</>, Footer: () => <div className="h-16"></div> }}
+            components={{ EmptyPlaceholder: () => <>Nothing yet</> }}
         />
     );
     // return (
