@@ -14,15 +14,17 @@ import {
     Instagram,
     MessagesSquare,
 } from "lucide-react";
+
+
 import { signIn, useSession } from "next-auth/react";
+import Image from "next/image";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
+import { GetStarted } from "./_components/GetStarted";
 
 export default function LandingPage() {
     const session = useSession();
-    useEffect(() => {
-        if (session?.status == "authenticated") redirect("/home");
-    }, [session.status]);
+    
 
     return (
         <div className="min-h-screen bg-white">
@@ -38,12 +40,8 @@ export default function LandingPage() {
                             <Languages className="h-10 w-10 text-blue-600" />
                             <span className="ml-3 text-2xl font-bold text-gray-900">LangBuddy</span>
                         </div>
-                        <Button
-                            onClick={() => signIn("google")}
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full"
-                        >
-                            Get Started
-                        </Button>
+
+                        <GetStarted />
                     </div>
                 </nav>
 
@@ -58,12 +56,7 @@ export default function LandingPage() {
                                 Find language exchange partners, practice with native speakers, and
                                 make friends from around the world.
                             </p>
-                            <Button
-                                onClick={() => signIn("google")}
-                                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg rounded-full"
-                            >
-                                Start Learning Now
-                            </Button>
+                            <GetStarted />
                         </div>
                         <div className="flex justify-center">
                             <MessagesSquare className="h-64 w-64 text-blue-600" />
@@ -169,12 +162,7 @@ export default function LandingPage() {
                     <h2 className="text-3xl font-bold text-white mb-8">
                         Ready to Start Your Language Learning Journey?
                     </h2>
-                    <Button
-                        onClick={() => signIn("google")}
-                        className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg rounded-full"
-                    >
-                        Join LangBuddy Now
-                    </Button>
+                    <GetStarted />
                 </div>
             </div>
 

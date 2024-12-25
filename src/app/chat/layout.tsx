@@ -7,7 +7,6 @@ import PageWrapper from "../_components/page-wrapper";
 import useProtected from "~/utils/useProtected";
 import { Menu, X } from "lucide-react";
 import { ChatSidebar } from "./ChatSidebar/ChatSidebar";
-import { Head } from "next/document";
 
 export default function ChatLayout({
     children,
