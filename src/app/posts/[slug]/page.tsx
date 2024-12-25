@@ -9,7 +9,7 @@ import Image from "next/image";
 import CommentSection from "~/app/_components/comment/comment";
 import { Button } from "antd";
 
-import { LogIn } from 'lucide-react';
+import { LogIn } from "lucide-react";
 // Types
 interface Author {
     id?: string;
@@ -173,17 +173,22 @@ export default function ViewPost() {
                             />
 
                             <div className="mt-8 border-t border-gray-200 pt-8">
-                                {
-                                    session.status == "authenticated" && <NewComment onAddComment={() => {}} postId={post.id} />
-                                }
-                                
-                                {
-                                    session.status == "unauthenticated" && <Button onClick={() =>signIn("google", {
-                                        redirectTo: location.href
-                                    })} icon={<LogIn/>}>
+                                {session.status == "authenticated" && (
+                                    <NewComment onAddComment={() => {}} postId={post.id} />
+                                )}
+
+                                {session.status == "unauthenticated" && (
+                                    <Button
+                                        onClick={() =>
+                                            signIn("google", {
+                                                redirectTo: location.href,
+                                            })
+                                        }
+                                        icon={<LogIn />}
+                                    >
                                         Login To Comment
                                     </Button>
-                                }
+                                )}
                             </div>
 
                             <CommentSection

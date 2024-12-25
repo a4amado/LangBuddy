@@ -87,7 +87,6 @@ export default function HomePage() {
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="w-full"
-                                
                             />
                         </div>
 
@@ -191,7 +190,9 @@ export default function HomePage() {
                                     />
                                     <div>
                                         <h3 className="text-lg font-semibold">{user.name}</h3>
-                                        <p className="text-sm text-gray-500">{countryCodeToName[user.country || ""]}</p>
+                                        <p className="text-sm text-gray-500">
+                                            {countryCodeToName[user.country || ""]}
+                                        </p>
                                     </div>
                                 </div>
 
@@ -210,7 +211,8 @@ export default function HomePage() {
                                                         : "bg-blue-100 text-blue-800"
                                                 }`}
                                             >
-                                                {codeToLanguage[lang.language]} ({lang.rank == "MOTHER" ? "Native": "2nd Langauge"})
+                                                {codeToLanguage[lang.language]} (
+                                                {lang.rank == "MOTHER" ? "Native" : "2nd Langauge"})
                                             </span>
                                         ))}
                                     </div>

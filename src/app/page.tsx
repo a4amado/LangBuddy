@@ -15,7 +15,6 @@ import {
     MessagesSquare,
 } from "lucide-react";
 
-
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { redirect } from "next/navigation";
@@ -24,7 +23,6 @@ import { GetStarted } from "./_components/GetStarted";
 
 export default function LandingPage() {
     const session = useSession();
-    
 
     return (
         <div className="min-h-screen bg-white">

@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChatMessageItem } from "./ChatMessageItem";
 import { useSession } from "next-auth/react";
 import { api } from "~/trpc/react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../ChatState/store";
-
+import * as Virtuoso from "react-virtuoso";
 export const ChatMessagesList: React.FC = () => {
-    const ref = useRef<HTMLDivElement>(null);
+    const ref = useRef<Virtuoso.VirtuosoHandle>(null);
 
     const active = useSelector<RootState>((state) => state.active) as RootState["active"];
     const chatMessages = useSelector<RootState>((state) => state.messages) as RootState["messages"];
@@ -17,31 +17,34 @@ export const ChatMessagesList: React.FC = () => {
     useEffect(() => {
         if (!ref.current) return;
 
-        const scrollToBottom = () => {
-            ref.current?.scrollTo({
-                top: ref.current.scrollHeight,
-                behavior: "smooth",
-            });
-        };
-
         // Optional: Check if we're near bottom before scrolling
-        const shouldScrollToBottom = () => {
-            if (!ref.current) return false;
-            const { scrollTop, scrollHeight, clientHeight } = ref.current;
-            return scrollHeight - scrollTop - clientHeight <= clientHeight / 3;
-        };
 
         // if (shouldScrollToBottom()) {
         //     scrollToBottom();
         // }
-        scrollToBottom();
+
+        // @ts-ignore
+        ref.current.scrollToIndex(chatMessages[active]?.length - 1);
     }, [active, chatMessages]);
 
     return (
-        <div ref={ref} className="flex flex-col flex-1 h-full  w-full overflow-y-scroll relative">
-            {(chatMessages[active || ""] ?? []).map((message, idx) => (
-                <ChatMessageItem key={message.id} idx={idx} />
-            ))}
-        </div>
+        <Virtuoso.Virtuoso
+            ref={ref}
+            data={chatMessages[active || ""]}
+            alignToBottom
+            
+            itemContent={(idx) => {
+                // @ts-ignore
+                return <ChatMessageItem key={chatMessages[active][idx]?.id ?? ""} idx={idx} />;
+            }}
+            components={{ EmptyPlaceholder: () => <>Nothing yet</>, Footer: () => <div className="h-16"></div> }}
+        />
     );
+    // return (
+    //     <div ref={ref} className="flex flex-col flex-1 h-full  w-full overflow-y-scroll relative">
+
+    //         {(chatMessages[active || ""] ?? []).map((message, idx) => (
+    //         ))}
+    //     </div>
+    // );
 };

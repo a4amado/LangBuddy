@@ -70,6 +70,15 @@ export default function ChatPage() {
         setIsSidebarOpen(!isSidebarOpen);
     };
     const loading = useSelector<RootState>((state) => state.state) as RootState["state"];
+    const [isLoading, setLoading] = useState(false);
+
+    useEffect(() => {
+        setLoading(true);
+        const t = setTimeout(() => {
+            setLoading(false);
+        }, 100);
+        return () => clearTimeout(t);
+    }, [active]);
 
     return (
         <>
@@ -82,7 +91,11 @@ export default function ChatPage() {
                                 <ChatHeader
                                     onSettingsClick={() => console.log("Settings clicked")}
                                 />
-                                <div className="flex-1 overflow-hidden">
+                                <div className="flex-1 overflow-hidden relative">
+                                    <div
+                                        className={`absolute z-10 ${isLoading ? "block" : "hidden"} w-full h-full top-0 left-0 bg-white`}
+                                    ></div>
+
                                     <ChatMessagesList />
                                 </div>
                                 <ChatInput onSendMessage={() => {}} />

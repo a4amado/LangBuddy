@@ -14,14 +14,13 @@ export default function ChatLayout({
     children: React.ReactNode;
 }>) {
     useEffect(() => {
-        document.title = "Chat"
-    }, [])
+        document.title = "Chat";
+    }, []);
     useProtected();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     return (
         <PageWrapper>
-
             <Provider store={store}>
                 <div className="h-full flex relative">
                     {/* Mobile Menu Button */}

@@ -31,7 +31,6 @@ export const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ idx }) => {
         return null;
     }
 
-
     const isCurrentUser = message[idx]?.senderId === session?.user.id;
     // const loading = useMemo(() => {
     //     return !isCuid(message[idx]?.id)

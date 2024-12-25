@@ -49,7 +49,7 @@ const ChatSidebarBodyItem: React.FC<ChatSidebarBodyItemProps> = React.memo(({ id
     };
     return (
         <div
-            className={`p-3 mb-2 rounded cursor-pointer ${
+            className={`p-3 m-2 rounded  cursor-pointer ${
                 activeChat ? "bg-blue-100" : "hover:bg-gray-200"
             }`}
             role="button"
@@ -59,8 +59,7 @@ const ChatSidebarBodyItem: React.FC<ChatSidebarBodyItemProps> = React.memo(({ id
                 dispatch(switchChat({ id }));
             }}
         >
-            <div className="flex">
-                {" "}
+            <div className="flex gap-2">
                 <Image
                     className="rounded-lg"
                     src={otherUser?.image || ""}
@@ -70,7 +69,7 @@ const ChatSidebarBodyItem: React.FC<ChatSidebarBodyItemProps> = React.memo(({ id
                 />
                 <h3 className="font-semibold">{otherUser.name}</h3>
             </div>
-            <p className="text-sm text-gray-600 truncate">
+            <p className="text-sm ml-2 text-gray-600 truncate">
                 {chats[idx]?.lastMessage?.content ?? "No messages yet"}
             </p>
         </div>

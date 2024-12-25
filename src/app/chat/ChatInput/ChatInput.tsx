@@ -21,31 +21,39 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
     const chats = useSelector<RootState>((state) => state.chats) as RootState["chats"];
     const handleSendMessage = useCallback(() => {
         if (message.trim() && session?.user?.id) {
-            const mesage_temp_id = Math.random().toString()
-            dispatch(addNewMessage({
-                chatId: active,
-                createdAt: new Date(),
-                content: message,
-                id: mesage_temp_id,
-                sender: {
-                    id: session.user.id,
-                    name: session.user.name ?? "",
-                    image: session.user.image ?? "",
-                },
-                senderId: session.user.id,
-                updatedAt: new Date()
-            }));
+            const mesage_temp_id = Math.random().toString();
+            dispatch(
+                addNewMessage({
+                    chatId: active,
+                    createdAt: new Date(),
+                    content: message,
+                    id: mesage_temp_id,
+                    sender: {
+                        id: session.user.id,
+                        name: session.user.name ?? "",
+                        image: session.user.image ?? "",
+                    },
+                    senderId: session.user.id,
+                    updatedAt: new Date(),
+                }),
+            );
 
-            sendMessage({ content: message, chatId: active || "" }, {
-                onSuccess(data) {
-                    dispatch(replaceMessege({
-                        chatId: active,
-                        messegeId: mesage_temp_id,
-                        replaceWith: data
-                    }));
-
+            console.log("DONEssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
+            
+            sendMessage(
+                { content: message, chatId: active || "" },
+                {
+                    onSuccess(data) {
+                        dispatch(
+                            replaceMessege({
+                                chatId: active,
+                                messegeId: mesage_temp_id,
+                                replaceWith: data,
+                            }),
+                        );
+                    },
                 },
-            });
+            );
             setMessage("");
         }
     }, [message, sendMessage, session?.user?.id]);
