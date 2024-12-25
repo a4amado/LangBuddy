@@ -1,50 +1,45 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { ChatMessageItem } from "./ChatMessageItem";
-import { useSession } from "next-auth/react";
-import { api } from "~/trpc/react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../ChatState/store";
 import * as Virtuoso from "react-virtuoso";
-export const ChatMessagesList: React.FC = () => {
-    const ref = useRef<Virtuoso.VirtuosoHandle>(null);
 
+export const ChatMessagesList = () => {
+    const ref = useRef<Virtuoso.VirtuosoHandle>(null);
     const active = useSelector<RootState>((state) => state.active) as RootState["active"];
     const chatMessages = useSelector<RootState>((state) => state.messages) as RootState["messages"];
+    const activeChat = chatMessages[active] ?? [];
 
-    // Scroll to bottom on new messages or chat change
     useEffect(() => {
-        if (!ref.current) return;
-
-        // Optional: Check if we're near bottom before scrolling
-
-        // if (shouldScrollToBottom()) {
-        //     scrollToBottom();
-        // }
-
-        // @ts-ignore
-        ref.current.scrollToIndex(chatMessages[active]?.length - 1);
-    }, [active, chatMessages]);
+        // Small delay to ensure DOM is ready
+        const timer = setTimeout(() => {
+            ref.current?.scrollToIndex({
+                index: activeChat.length - 1,
+                behavior: 'auto'
+            });
+        }, 50);
+        
+        return () => clearTimeout(timer);
+    }, [active, activeChat.length]);
 
     return (
-        <Virtuoso.Virtuoso
-            ref={ref}
-            data={chatMessages[active || ""]}
-            alignToBottom
-
-            itemContent={(idx) => {
-                // @ts-ignore
-                return <ChatMessageItem key={chatMessages[active][idx]?.id ?? ""} idx={idx} />;
-            }}
-            components={{ EmptyPlaceholder: () => <>Nothing yet</> }}
-        />
+        <div className="h-full w-full">
+            <Virtuoso.Virtuoso
+                ref={ref}
+                data={activeChat}
+                alignToBottom
+                followOutput="smooth"
+                components={{
+                    Footer: () => <div className="h-2" /> // Add small padding at bottom
+                }}
+                initialItemCount={activeChat.length}
+                itemContent={(index) => (
+                    <ChatMessageItem key={activeChat[index]?.id} idx={index} />
+                )}
+                style={{ height: '100%' }}
+            />
+        </div>
     );
-    // return (
-    //     <div ref={ref} className="flex flex-col flex-1 h-full  w-full overflow-y-scroll relative">
-
-    //         {(chatMessages[active || ""] ?? []).map((message, idx) => (
-    //         ))}
-    //     </div>
-    // );
 };
+
+export default ChatMessagesList;
