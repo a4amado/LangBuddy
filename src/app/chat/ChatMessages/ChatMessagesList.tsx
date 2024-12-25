@@ -29,6 +29,7 @@ export const ChatMessagesList = () => {
                 data={activeChat}
                 alignToBottom
                 followOutput="smooth"
+                atBottomThreshold={100}
                 components={{
                     Footer: () => <div className="h-2" /> // Add small padding at bottom
                 }}
