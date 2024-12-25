@@ -58,7 +58,11 @@ const chatSlice = createSlice({
                         lastMessage: { ...action.payload },
                     };
                 }
-                console.log(action.payload);
+                state.chats = JSON.parse(JSON.stringify(state.chats)).sort((a: { lastMessage: { createdAt: any; }; },b: { lastMessage: { createdAt: any; }; }) => {
+                    const timeA = new Date(a.lastMessage?.createdAt ?? "").getTime()
+                    const timeB = new Date(b.lastMessage?.createdAt ?? "").getTime()
+                    return  timeB - timeA
+                })
             }
         },
         replaceMessege: (
