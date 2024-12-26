@@ -34,7 +34,7 @@ export default function ChatPage() {
     const chats = api.chat.getAll.useQuery();
     const audioRef = useRef<HTMLAudioElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
-    
+
     useEffect(() => {
         // Initialize Pusher
         const pusher = new Pusher("e52b6be16531b104cc75", {
@@ -54,7 +54,7 @@ export default function ChatPage() {
                     const playPromise = audioRef.current.play();
                     if (playPromise !== undefined) {
                         playPromise
-                            .catch(e => console.log("Audio play failed:", e))
+                            .catch((e) => console.log("Audio play failed:", e))
                             .finally(() => setIsPlaying(false));
                     }
                 } catch (error) {
@@ -62,14 +62,16 @@ export default function ChatPage() {
                     setIsPlaying(false);
                 }
             }
-            
+
             if (messeges[data.chatId]) {
                 dispatch(addNewMessage(data as any));
             } else {
-                dispatch(fetchNonExistingChat({
-                    payload: { chat_id: data.chatId },
-                    type: ""
-                }));
+                dispatch(
+                    fetchNonExistingChat({
+                        payload: { chat_id: data.chatId },
+                        type: "",
+                    }),
+                );
             }
         });
 
@@ -106,9 +108,9 @@ export default function ChatPage() {
         const audio = audioRef.current;
         if (audio) {
             const handleEnded = () => setIsPlaying(false);
-            audio.addEventListener('ended', handleEnded);
+            audio.addEventListener("ended", handleEnded);
             return () => {
-                audio.removeEventListener('ended', handleEnded);
+                audio.removeEventListener("ended", handleEnded);
             };
         }
     }, []);
@@ -116,7 +118,7 @@ export default function ChatPage() {
     return (
         <>
             <audio ref={audioRef} src="/notification.mp3" />
-            
+
             {/* Mobile Menu Button */}
             <button
                 onClick={() => {

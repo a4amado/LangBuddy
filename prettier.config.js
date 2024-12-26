@@ -1,4 +1,9 @@
+import { withUt } from "uploadthing/tw";
+
 /** @type {import('prettier').Config & import('prettier-plugin-tailwindcss').PluginOptions} */
-export default {
+// @ts-ignore
+export default withUt({
+    // @ts-ignore
     plugins: ["prettier-plugin-tailwindcss"],
-};
+    // @ts-ignore
+});

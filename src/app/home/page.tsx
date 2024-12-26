@@ -150,8 +150,6 @@ export default function HomePage() {
                                     <div>
                                         <h3 className="text-lg font-semibold">{user.name}</h3>
                                         <p className="text-sm text-gray-500">{user.country}</p>
-                                        
-                                        
                                     </div>
                                 </div>
 

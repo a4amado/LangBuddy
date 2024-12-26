@@ -7,7 +7,7 @@ import "./src/env.js";
 /** @type {import("next").NextConfig} */
 const config = {
     images: {
-        domains: ["flagsapi.com", "lh3.googleusercontent.com"],
+        domains: ["flagsapi.com", "lh3.googleusercontent.com", "utfs.io"],
     },
 };
 

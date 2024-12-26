@@ -10,6 +10,7 @@ import CommentSection from "~/app/_components/comment/comment";
 import { Button } from "antd";
 
 import { LogIn } from "lucide-react";
+import { ImagePreview } from "~/components/images/preview-image";
 // Types
 interface Author {
     id?: string;
@@ -17,12 +18,6 @@ interface Author {
     name?: string | null;
 }
 
-interface Post {
-    id: string;
-    title: string;
-    content: string;
-    createdBy?: Author;
-}
 
 // Loading Component
 const LoadingState = () => (
@@ -157,7 +152,9 @@ export default function ViewPost() {
                             />
 
                             <PostContent title={post.title} content={post.content} />
-
+                            {
+                                post.images?.split(",").map(src => <ImagePreview key={src} src={src}/>)
+                            }
                             <PostActions
                                 isAuthor={isAuthor}
                                 onBack={() => router.back()}
