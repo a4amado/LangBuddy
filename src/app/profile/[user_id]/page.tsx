@@ -114,13 +114,19 @@ export default async function ProfilePage({ params }: { params: Promise<{ user_i
                                         >
                                             {" "}
                                             <Flag
-                                                code={languageCodeToCountryCode[languageToCode[lang.language ?? ""] ?? ""]}
+                                                code={
+                                                    languageCodeToCountryCode[
+                                                        languageToCode[lang.language ?? ""] ?? ""
+                                                    ]
+                                                }
                                                 width={20}
                                                 className="m-1"
                                             />{" "}
                                             {lang.language} (
                                             {
-                                                languageCodeToCountryCode[languageToCode[lang.language ?? ""] ?? ""]
+                                                languageCodeToCountryCode[
+                                                    languageToCode[lang.language ?? ""] ?? ""
+                                                ]
                                             }
                                             )
                                         </span>

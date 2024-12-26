@@ -156,7 +156,7 @@ export const userRouter = createTRPCRouter({
                         NOT: {
                             id: ctx.session.user.id,
                         },
-                    }
+                    },
                 });
                 return ss;
             }

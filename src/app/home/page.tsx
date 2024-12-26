@@ -12,6 +12,7 @@ import PageWrapper from "../_components/page-wrapper";
 import { useProtected } from "~/hooks/useProtected";
 import LanguageSelector from "./language-selector";
 import CountrySelector from "./country-selector";
+import ReactTimeAgo from "react-time-ago";
 
 export default function HomePage() {
     useProtected();
@@ -27,17 +28,17 @@ export default function HomePage() {
     // Fetch user languages for the filter
 
     // Search users query
-    const { data: searchResults, isLoading: isLoadingSearch, refetch } = api.user.search.useQuery(
-        {
-            languages: selectedLanguages,
-            query: selectedCountry
-
-        },
-        
-    );
+    const {
+        data: searchResults,
+        isLoading: isLoadingSearch,
+        refetch,
+    } = api.user.search.useQuery({
+        languages: selectedLanguages,
+        query: selectedCountry,
+    });
     useEffect(() => {
-        refetch()
-    }, [selectedCountry, selectedLanguages])
+        refetch();
+    }, [selectedCountry, selectedLanguages]);
 
     // Create chat mutation
     const { mutate: createChat } = api.chat.create.useMutation({
@@ -92,8 +93,14 @@ export default function HomePage() {
                             />
                         </div>
 
-                        <LanguageSelector  selectedLanguages={selectedLanguages} setSelectedLanguages={setSelectedLanguages}/>
-                        <CountrySelector selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry} />
+                        <LanguageSelector
+                            selectedLanguages={selectedLanguages}
+                            setSelectedLanguages={setSelectedLanguages}
+                        />
+                        <CountrySelector
+                            selectedCountry={selectedCountry}
+                            setSelectedCountry={setSelectedCountry}
+                        />
                         {/* Clear Filters */}
                         <div>
                             <Button
@@ -142,9 +149,9 @@ export default function HomePage() {
                                     />
                                     <div>
                                         <h3 className="text-lg font-semibold">{user.name}</h3>
-                                        <p className="text-sm text-gray-500">
-                                            {user.country}
-                                        </p>
+                                        <p className="text-sm text-gray-500">{user.country}</p>
+                                        
+                                        
                                     </div>
                                 </div>
 
