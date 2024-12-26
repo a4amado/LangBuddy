@@ -70,7 +70,9 @@ export default function ChatPage() {
         };
     }, [chats.status]);
 
-    const SidebarOpen = useSelector<RootState>(state => state.isSideBarOpen) as RootState["isSideBarOpen"]
+    const SidebarOpen = useSelector<RootState>(
+        (state) => state.isSideBarOpen,
+    ) as RootState["isSideBarOpen"];
 
     const loading = useSelector<RootState>((state) => state.state) as RootState["state"];
     const [isLoading, setLoading] = useState(false);
@@ -85,48 +87,36 @@ export default function ChatPage() {
 
     return (
         <>
-                            {/* Mobile Menu Button */}
-                            <button
-                        onClick={() => {
-                            dispatch(toggleSideBar({}))
-                        }}
-                        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-full shadow-lg"
-                        aria-label="Toggle menu"
-                    >
-                        {SidebarOpen ? (
-                            <X className="h-6 w-6 text-gray-600" />
-                        ) : (
-                            <Menu className="h-6 w-6 text-gray-600" />
-                        )}
-                    </button>
+            {/* Mobile Menu Button */}
+            <button
+                onClick={() => {
+                    dispatch(toggleSideBar({}));
+                }}
+                className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-full shadow-lg"
+                aria-label="Toggle menu"
+            >
+                {SidebarOpen ? (
+                    <X className="h-6 w-6 text-gray-600" />
+                ) : (
+                    <Menu className="h-6 w-6 text-gray-600" />
+                )}
+            </button>
 
-                    {/* Chat Sidebar */}
-                    <div
-                        className={`
+            {/* Chat Sidebar */}
+            <div
+                className={`
                             fixed lg:static inset-0 z-40
                             w-80 bg-white border-r
                             transform transition-transform duration-300 ease-in-out
                             ${SidebarOpen ? "translate-x-0" : "-translate-x-full"}
                             lg:translate-x-0
                         `}
-                    >
-                        <div className="h-full overflow-y-auto pt-16 lg:pt-0">
-                            <ChatSidebar />
-                        </div>
-                    </div>
+            >
+                <div className="h-full overflow-y-auto pt-16 lg:pt-0">
+                    <ChatSidebar />
+                </div>
+            </div>
 
-                    {/* Main Chat Area */}
-                    
-
-                    {/* Overlay for mobile */}
-                    {/* {SidebarOpen && (
-                        <div
-                            className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
-                            onClick={() => {
-                                dispatch(toggleSideBar({}))
-                            }}                        />
-                    )} */}
-                
             <main className="flex-1 flex h-full w-full overflow-hidden">
                 {loading == "loading" && <LoadingSpinner />}
                 {loading == "idel" && (

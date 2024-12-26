@@ -2,31 +2,31 @@
 
 import { Input, Select, SelectProps, Button } from "antd";
 import { useEffect, useState } from "react";
-import { languageCodes, codeToLanguage, languageToCountry } from "~/data/languages";
 import { api } from "~/trpc/react";
-import { countryCodes, countryCodeToName } from "~/data/countries";
 import { UserCircle, Globe, Languages, Heart } from "lucide-react";
 import Flag from "react-world-flags";
 import { useSession } from "next-auth/react";
+import { countryNames, countryNameToCode } from "~/data/countries";
+import { languageNames, languageToCode } from "~/data/languages";
 
-const options = languageCodes.map((language: string) => ({
+const options = languageNames.map((language: string) => ({
     label: (
         <div className="flex items-center space-x-2">
-            <Flag code={languageToCountry[language]} style={{ width: 24, height: 16 }} />
-            <span>{codeToLanguage[language] ?? ""}</span>
+            <Flag code={languageToCode[language]} style={{ width: 24, height: 16 }} />
+            <span>{language}</span>
         </div>
     ),
     value: language,
 }));
 
-const countriesOptions: SelectProps["options"] = countryCodes.map((code: any) => ({
+const countriesOptions: SelectProps["options"] = countryNames.map((countryName: string) => ({
     label: (
         <div className="flex items-center space-x-2">
-            <Flag code={code} style={{ width: 24, height: 16 }} />
-            <span>{countryCodeToName[code] ?? ""}</span>
+            <Flag code={countryNameToCode[countryName]} style={{ width: 24, height: 16 }} />
+            <span>{countryNames?? ""}</span>
         </div>
     ),
-    value: code,
+    value: countryName,
 }));
 
 const hobbiesSuggestions = [

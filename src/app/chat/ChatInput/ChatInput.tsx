@@ -39,7 +39,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
             );
 
             console.log("DONEssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
-            
+
             sendMessage(
                 { content: message, chatId: active || "" },
                 {

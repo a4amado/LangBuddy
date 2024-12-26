@@ -55,9 +55,8 @@ const ChatSidebarBodyItem: React.FC<ChatSidebarBodyItemProps> = React.memo(({ id
             }`}
             role="button"
             onClick={() => {
-
                 dispatch(switchChat({ id }));
-                dispatch(toggleSideBar({}))
+                dispatch(toggleSideBar({}));
             }}
         >
             <div className="flex gap-2">

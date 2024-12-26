@@ -15,11 +15,9 @@ export const ChatMessagesList = () => {
         // Only scroll to bottom if user was already at bottom
         ref.current?.scrollToIndex({
             index: activeChat.length - 1,
-            behavior: 'auto'
+            behavior: "auto",
         });
-        
     }, []);
-
 
     useEffect(() => {
         // Only scroll to bottom if user was already at bottom
@@ -27,10 +25,10 @@ export const ChatMessagesList = () => {
             const timer = setTimeout(() => {
                 ref.current?.scrollToIndex({
                     index: activeChat.length - 1,
-                    behavior: 'auto'
+                    behavior: "auto",
                 });
             }, 50);
-            
+
             return () => clearTimeout(timer);
         }
     }, [active, activeChat.length, atBottom]);
@@ -44,12 +42,10 @@ export const ChatMessagesList = () => {
                 followOutput="smooth"
                 atBottomThreshold={100}
                 initialItemCount={activeChat.length}
-                itemContent={(index) => (
-                    <ChatMessageItem key={activeChat[index]?.id} idx={index} />
-                )}
-                style={{ height: '100%' }}
+                itemContent={(index) => <ChatMessageItem key={activeChat[index]?.id} idx={index} />}
+                style={{ height: "100%" }}
                 components={{
-                    Footer: () => <div className="h-2" />
+                    Footer: () => <div className="h-2" />,
                 }}
                 atBottomStateChange={(isAtBottom) => {
                     setAtBottom(isAtBottom);

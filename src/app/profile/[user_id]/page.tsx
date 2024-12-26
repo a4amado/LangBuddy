@@ -5,13 +5,13 @@ import { Globe, Languages, Book, Heart, LoaderCircle } from "lucide-react";
 
 import { NextPageContext } from "next";
 import { db } from "~/server/db";
-import { countryCodeToName } from "~/data/countries";
 import Flag from "react-world-flags";
-import { codeToLanguage, languageNames, languageToCountry } from "~/data/languages";
+
 import { redirect } from "next/navigation";
 
 import dynamic from "next/dynamic";
 import PageWrapper from "~/app/_components/page-wrapper";
+import { languageCodeToCountryCode, languageToCode } from "~/data/languages";
 
 // import Post from "~/app/_components/post/Post";
 
@@ -84,7 +84,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ user_i
                                             width={30}
                                             className="m-2"
                                         />
-                                        {countryCodeToName[user?.country?.toUpperCase() ?? ""]}
+                                        {user.country}
                                     </p>
                                 </div>
                             </div>
@@ -93,7 +93,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ user_i
                                 <Languages className="w-5 h-5 text-blue-500 mr-3" />
                                 <div>
                                     <p className="text-sm text-gray-500">Native Language</p>
-                                    <p className="font-medium">{codeToLanguage[native ?? ""]}</p>
+                                    <p className="font-medium">{native}</p>
                                 </div>
                             </div>
                         </div>
@@ -114,15 +114,13 @@ export default async function ProfilePage({ params }: { params: Promise<{ user_i
                                         >
                                             {" "}
                                             <Flag
-                                                code={languageToCountry[lang.language]}
+                                                code={languageCodeToCountryCode[languageToCode[lang.language ?? ""] ?? ""]}
                                                 width={20}
                                                 className="m-1"
                                             />{" "}
-                                            {codeToLanguage[lang.language]} (
+                                            {lang.language} (
                                             {
-                                                countryCodeToName[
-                                                    languageToCountry[lang.language] ?? ""
-                                                ]
+                                                languageCodeToCountryCode[languageToCode[lang.language ?? ""] ?? ""]
                                             }
                                             )
                                         </span>

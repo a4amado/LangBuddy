@@ -8,5 +8,8 @@ export function useProtected() {
         if (session.status === "unauthenticated") {
             redirect("/home");
         }
+        if (!session.data?.user.isBoarded) {
+            redirect("/onboarding");
+        }
     }, [session.status]);
 }

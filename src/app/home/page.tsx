@@ -6,12 +6,12 @@ import { api } from "~/trpc/react";
 import { Search, Globe2, Languages, Users2, MessageCircle, Filter } from "lucide-react";
 import { Avatar, Button, Input, Select, Spin } from "antd";
 import Link from "next/link";
-import { codeToLanguage, languageCodes, languageToCountry } from "~/data/languages";
-import { countryCodes, countryCodeToName } from "~/data/countries";
 import Flag from "react-world-flags";
 import { useRouter } from "next/navigation";
 import PageWrapper from "../_components/page-wrapper";
 import { useProtected } from "~/hooks/useProtected";
+import LanguageSelector from "./language-selector";
+import CountrySelector from "./country-selector";
 
 export default function HomePage() {
     useProtected();
@@ -27,15 +27,17 @@ export default function HomePage() {
     // Fetch user languages for the filter
 
     // Search users query
-    const { data: searchResults, isLoading: isLoadingSearch } = api.user.search.useQuery(
+    const { data: searchResults, isLoading: isLoadingSearch, refetch } = api.user.search.useQuery(
         {
-            query: debouncedSearch,
             languages: selectedLanguages,
+            query: selectedCountry
+
         },
-        {
-            enabled: debouncedSearch !== "" || selectedLanguages !== "" || selectedCountry !== "",
-        },
+        
     );
+    useEffect(() => {
+        refetch()
+    }, [selectedCountry, selectedLanguages])
 
     // Create chat mutation
     const { mutate: createChat } = api.chat.create.useMutation({
@@ -90,58 +92,8 @@ export default function HomePage() {
                             />
                         </div>
 
-                        {/* Language Filter */}
-                        <div>
-                            <Select
-                                placeholder={
-                                    <div className="flex items-center">
-                                        <Languages className="mr-2" size={20} />
-                                        Select Languages
-                                    </div>
-                                }
-                                value={selectedLanguages}
-                                onChange={setSelectedLanguages}
-                                className="w-full"
-                                options={languageCodes?.map((code) => ({
-                                    label: (
-                                        <div className="flex items-center">
-                                            <Flag
-                                                className="w-4 mx-1"
-                                                code={languageToCountry[code]}
-                                            />
-                                            {codeToLanguage[code]}
-                                        </div>
-                                    ),
-                                    value: code,
-                                }))}
-                            />
-                        </div>
-
-                        {/* Country Filter */}
-                        <div>
-                            <Select
-                                placeholder={
-                                    <div className="flex items-center">
-                                        <Globe2 className="mr-2" size={20} />
-                                        Select Country
-                                    </div>
-                                }
-                                value={selectedCountry}
-                                onChange={setSelectedCountry}
-                                className="w-full"
-                                allowClear
-                                options={countryCodes.map((code) => ({
-                                    label: (
-                                        <div className="flex items-center">
-                                            <Flag className="w-4 mx-1" code={code} />
-                                            <span>{countryCodeToName[code]}</span>
-                                        </div>
-                                    ),
-                                    value: code,
-                                }))}
-                            />
-                        </div>
-
+                        <LanguageSelector  selectedLanguages={selectedLanguages} setSelectedLanguages={setSelectedLanguages}/>
+                        <CountrySelector selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry} />
                         {/* Clear Filters */}
                         <div>
                             <Button
@@ -191,7 +143,7 @@ export default function HomePage() {
                                     <div>
                                         <h3 className="text-lg font-semibold">{user.name}</h3>
                                         <p className="text-sm text-gray-500">
-                                            {countryCodeToName[user.country || ""]}
+                                            {user.country}
                                         </p>
                                     </div>
                                 </div>
@@ -211,7 +163,7 @@ export default function HomePage() {
                                                         : "bg-blue-100 text-blue-800"
                                                 }`}
                                             >
-                                                {codeToLanguage[lang.language]} (
+                                                {lang.language} (
                                                 {lang.rank == "MOTHER" ? "Native" : "2nd Langauge"})
                                             </span>
                                         ))}

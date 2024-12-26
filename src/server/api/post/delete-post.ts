@@ -12,17 +12,16 @@ export const deletePost = protectedProcedure
 
         if (!post || post.createdById !== ctx.session.user.id) {
             throw new TRPCError({
-                code: "FORBIDDEN"
+                code: "FORBIDDEN",
             });
         }
 
         console.log("update");
-        
 
         return db.post.update({
             where: { id: input.id },
             data: {
-                createdById: null
-            }
+                createdById: null,
+            },
         });
     });
