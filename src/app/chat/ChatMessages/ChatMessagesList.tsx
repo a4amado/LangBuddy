@@ -13,6 +13,16 @@ export const ChatMessagesList = () => {
 
     useEffect(() => {
         // Only scroll to bottom if user was already at bottom
+        ref.current?.scrollToIndex({
+            index: activeChat.length - 1,
+            behavior: 'auto'
+        });
+        
+    }, []);
+
+
+    useEffect(() => {
+        // Only scroll to bottom if user was already at bottom
         if (atBottom) {
             const timer = setTimeout(() => {
                 ref.current?.scrollToIndex({

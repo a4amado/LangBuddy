@@ -4,7 +4,7 @@ import React from "react";
 import { LoaderPinwheel } from "lucide-react";
 import { api } from "~/trpc/react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState, switchChat } from "../ChatState/store";
+import { AppDispatch, RootState, switchChat, toggleSideBar } from "../ChatState/store";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 
@@ -47,6 +47,7 @@ const ChatSidebarBodyItem: React.FC<ChatSidebarBodyItemProps> = React.memo(({ id
         image: "/delete-user.webp",
         name: "Deleted User",
     };
+
     return (
         <div
             className={`p-3 m-2 rounded  cursor-pointer ${
@@ -54,9 +55,9 @@ const ChatSidebarBodyItem: React.FC<ChatSidebarBodyItemProps> = React.memo(({ id
             }`}
             role="button"
             onClick={() => {
-                console.log("id", id);
 
                 dispatch(switchChat({ id }));
+                dispatch(toggleSideBar({}))
             }}
         >
             <div className="flex gap-2">

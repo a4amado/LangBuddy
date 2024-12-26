@@ -5,11 +5,12 @@ import { client } from "~/trpc/fetch";
 type AppOutput = inferRouterOutputs<AppRouter>;
 
 type State = "loading" | "idel";
-const initialState: AppOutput["chat"]["getAll"] & { state: State } = {
+const initialState: AppOutput["chat"]["getAll"] & { state: State, isSideBarOpen: boolean } = {
     state: "loading",
     chats: [],
     messages: {},
     active: "",
+    isSideBarOpen: false
 };
 
 export const fetchNonExistingChat = createAsyncThunk(
@@ -35,6 +36,10 @@ const chatSlice = createSlice({
         },
         switch: (state, action: PayloadAction<{ id: string }>) => {
             state.active = action.payload.id;
+            
+        },
+        toggleSideBar: (state, action) => {
+            state.isSideBarOpen = !state.isSideBarOpen
         },
         addNewMessage: (
             state,
@@ -83,6 +88,7 @@ const chatSlice = createSlice({
 
             console.log("after", state.messages[action.payload.chatId]);
         },
+
     },
     extraReducers(builder) {
         builder.addCase(
@@ -123,4 +129,4 @@ export const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
-export const { init, switch: switchChat, addNewMessage, replaceMessege } = chatSlice.actions;
+export const { init, switch: switchChat, addNewMessage, replaceMessege, toggleSideBar } = chatSlice.actions;
