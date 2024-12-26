@@ -77,6 +77,15 @@ export default function ChatPage() {
 
         // Initialize chats
         if (chats.data) {
+            for (const key in chats.data.messages) {
+                chats.data.messages[key]?.sort((a,b) => {
+                    const timeA = new Date(a.createdAt ?? "").getTime()
+                    const timeB = new Date(b.createdAt ?? "").getTime()
+                    return timeA - timeB
+                  })
+              }
+              
+              
             dispatch(init(chats.data));
         }
 

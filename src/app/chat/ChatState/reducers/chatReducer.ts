@@ -39,7 +39,8 @@ const chatSlice = createSlice({
                 if (!state.messages[chatId]) {
                     state.messages[chatId] = [];
                 }
-                state.messages[chatId].push(action.payload);
+                state.messages[chatId] = [...state.messages[chatId],action.payload]
+console.log(state.messages[chatId]);
 
                 // Update chat's last message
                 if (state?.chats[chatIndex]) {
@@ -56,7 +57,7 @@ const chatSlice = createSlice({
                     ) => {
                         const timeA = new Date(a.lastMessage?.createdAt ?? "").getTime();
                         const timeB = new Date(b.lastMessage?.createdAt ?? "").getTime();
-                        return timeB - timeA;
+                        return timeA - timeB;
                     },
                 );
             }
