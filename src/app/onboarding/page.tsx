@@ -23,7 +23,7 @@ const countriesOptions: SelectProps["options"] = countryNames.map((countryName: 
     label: (
         <div className="flex items-center space-x-2">
             <Flag code={countryNameToCode[countryName]} style={{ width: 24, height: 16 }} />
-            <span>{countryNames?? ""}</span>
+            <span>{countryName ?? ""}</span>
         </div>
     ),
     value: countryName,
