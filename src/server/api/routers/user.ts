@@ -152,6 +152,11 @@ export const userRouter = createTRPCRouter({
                     orderBy: {
                         lastSeen: "desc",
                     },
+                    where: {
+                        NOT: {
+                            id: ctx.session.user.id,
+                        },
+                    }
                 });
                 return ss;
             }
