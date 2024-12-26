@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Pusher from "pusher-js";
 import { ChatHeader } from "./ChatHeader/ChatHeader";
 import { ChatInput } from "./ChatInput/ChatInput";
@@ -32,8 +32,9 @@ export default function ChatPage() {
     const active = useSelector<RootState>((state) => state.active) as RootState["active"];
     const messeges = useSelector<RootState>((state) => state.messages) as RootState["messages"];
     const chats = api.chat.getAll.useQuery();
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
+    const audioRef = useRef<HTMLAudioElement>(null);
+    const [isPlaying, setIsPlaying] = useState(false);
+    
     useEffect(() => {
         // Initialize Pusher
         const pusher = new Pusher("e52b6be16531b104cc75", {
@@ -45,15 +46,30 @@ export default function ChatPage() {
 
         // Bind to event
         channel.bind("new_msg", async function (data: any) {
+            // Play notification sound
+            if (audioRef.current && !isPlaying) {
+                try {
+                    setIsPlaying(true);
+                    audioRef.current.currentTime = 0; // Reset audio to start
+                    const playPromise = audioRef.current.play();
+                    if (playPromise !== undefined) {
+                        playPromise
+                            .catch(e => console.log("Audio play failed:", e))
+                            .finally(() => setIsPlaying(false));
+                    }
+                } catch (error) {
+                    console.log("Audio play error:", error);
+                    setIsPlaying(false);
+                }
+            }
+            
             if (messeges[data.chatId]) {
-                console.log("new msg");
-
                 dispatch(addNewMessage(data as any));
             } else {
-                console.log("fetch new chat");
-
-                // @ts-ignore
-                dispatch(fetchNonExistingChat({ payload: { chat_id: data.chatId } }));
+                dispatch(fetchNonExistingChat({
+                    payload: { chat_id: data.chatId },
+                    type: ""
+                }));
             }
         });
 
@@ -68,7 +84,7 @@ export default function ChatPage() {
             channel.unsubscribe();
             pusher.disconnect();
         };
-    }, [chats.status]);
+    }, [chats.status, isPlaying]);
 
     const SidebarOpen = useSelector<RootState>(
         (state) => state.isSideBarOpen,
@@ -85,8 +101,22 @@ export default function ChatPage() {
         return () => clearTimeout(t);
     }, [active]);
 
+    // Add event listeners for audio
+    useEffect(() => {
+        const audio = audioRef.current;
+        if (audio) {
+            const handleEnded = () => setIsPlaying(false);
+            audio.addEventListener('ended', handleEnded);
+            return () => {
+                audio.removeEventListener('ended', handleEnded);
+            };
+        }
+    }, []);
+
     return (
         <>
+            <audio ref={audioRef} src="/notification.mp3" />
+            
             {/* Mobile Menu Button */}
             <button
                 onClick={() => {
@@ -130,7 +160,6 @@ export default function ChatPage() {
                                     <div
                                         className={`absolute z-10 ${isLoading ? "block" : "hidden"} w-full h-full top-0 left-0 bg-white`}
                                     ></div>
-
                                     <ChatMessagesList />
                                 </div>
                                 <ChatInput onSendMessage={() => {}} />
