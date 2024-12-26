@@ -8,5 +8,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         url: `${process.env.NEXT_PUBLIC_URL}/posts/${post.slug}`,
         lastModified: post.updatedAt,
         changeFrequency: "weekly",
+        images: post.images?.split(",") ?? [],
     }));
 }
