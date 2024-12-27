@@ -58,8 +58,14 @@ export const getAllChats = protectedProcedure.query(async ({ ctx }) => {
         messages: {} as Record<string, ChatType[0]["messages"]>,
         active: "",
     };
-    chats.forEach((val, idx) => {
-        state.messages[val.id.toString()] = val.messages;
+    
+    chats.forEach((chat) => {
+        state.messages[chat.id] = chat.messages;
+
+        (state?.messages[chat.id ?? ""] ?? []).sort((a, b) => 
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
     });
+    state.active = state.chats[0]?.id ?? ""
     return state;
 });
