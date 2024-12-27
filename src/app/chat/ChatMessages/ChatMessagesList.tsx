@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { ChatMessageItem } from "./ChatMessageItem";
 import { useDispatch, useSelector } from "react-redux";
-import {  AppDispatch, loadMoreToState, RootState } from "../ChatState/store";
+import { AppDispatch, loadMoreToState, RootState } from "../ChatState/store";
 import * as Virtuoso from "react-virtuoso";
 import { Button } from "antd";
 import { client } from "~/trpc/fetch";
 import { TRPCError } from "@trpc/server";
-
+import { MoreVertical } from "lucide-react";
 
 export const ChatMessagesList = () => {
     const ref = useRef<Virtuoso.VirtuosoHandle>(null);
@@ -47,7 +47,8 @@ export const ChatMessagesList = () => {
             behavior: "auto",
             align: "center",
         });
-    }, [activeChat]);
+    }, [lastFetch]);
+
     async function loadMore({ chatId }: { chatId: string }) {
         setLoadingMoreMessages(true);
         try {
@@ -97,8 +98,13 @@ export const ChatMessagesList = () => {
 
                                     loadMore({ chatId: active });
                                 }}
+                                size="large"
+                                loading={loadingMoreMessages}
+                                disabled={done ?? loadingMoreMessages}
+                                className="mx-auto block m-2"
                             >
-                                Load More
+                                {done && "Nothing more to fetch"}
+                                {!done && "Load More"}
                             </Button>
                         </div>
                     ),

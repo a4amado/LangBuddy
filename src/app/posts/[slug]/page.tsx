@@ -124,7 +124,7 @@ export default function ViewPost() {
 
     const deletePost = api.post.delete.useMutation({
         onSuccess: () => {
-            router.push("/home");
+            router.push("/explore");
             router.refresh();
         },
     });

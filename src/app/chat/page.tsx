@@ -9,14 +9,7 @@ import { ChatMessagesList } from "./ChatMessages/ChatMessagesList";
 import { api } from "~/trpc/react";
 
 import { useDispatch, useSelector } from "react-redux";
-import {
-    addNewMessage,
-    AppDispatch,
-    
-    init,
-    RootState,
-    toggleSideBar,
-} from "./ChatState/store";
+import { addNewMessage, AppDispatch, init, RootState, toggleSideBar } from "./ChatState/store";
 
 import { useSession } from "next-auth/react";
 import { LoadingSpinner } from "~/components/ui/loading";

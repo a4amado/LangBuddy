@@ -5,7 +5,6 @@ import { TRPCError } from "@trpc/server";
 import { AppOutput, ChatState } from "./types";
 import { fetchNonExistingChat } from "./actions/chatActions";
 
-
 const initialState: ChatState = {
     state: "loading",
     chats: [],
@@ -151,10 +150,5 @@ export const {
     loadMoreToState,
 } = chatSlice.actions;
 
-
-
-
-
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-
