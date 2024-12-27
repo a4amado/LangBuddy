@@ -5,8 +5,10 @@ import { is_user_the_sender_of_this_messege } from "~/utils/is_user_the_sender_o
 import { db } from "~/server/db";
 import { pusher } from "~/server/pusher/client";
 import { is_user_a_part_of_this_chat } from "~/utils/is_user_a_part_of_this_chat";
+import { getMessagesByChatId } from "../message/get-messages-by-chat-id";
 
 export const messageRouter = createTRPCRouter({
+    getMessagesByChatId: getMessagesByChatId,
     getMessegeById: protectedProcedure
         .input(
             z.object({

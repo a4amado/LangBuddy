@@ -18,7 +18,6 @@ interface Author {
     name?: string | null;
 }
 
-
 // Loading Component
 const LoadingState = () => (
     <PageWrapper>
@@ -152,9 +151,9 @@ export default function ViewPost() {
                             />
 
                             <PostContent title={post.title} content={post.content} />
-                            {
-                                post.images?.split(",").map(src => <ImagePreview key={src} src={src}/>)
-                            }
+                            {post.images
+                                ?.split(",")
+                                .map((src) => <ImagePreview key={src} src={src} />)}
                             <PostActions
                                 isAuthor={isAuthor}
                                 onBack={() => router.back()}

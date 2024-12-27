@@ -9,7 +9,7 @@ export const createPost = protectedProcedure
         z.object({
             title: z.string().min(1).max(100),
             content: z.string().min(1).max(500),
-            images: z.array(z.string().url().startsWith("https://utfs.io/"))
+            images: z.array(z.string().url().startsWith("https://utfs.io/")),
         }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -20,7 +20,7 @@ export const createPost = protectedProcedure
 
                 createdById: ctx.session.user.id,
                 slug: slug(`${input.title}-${randomUUID()}`),
-                images: input.images.join(",")
+                images: input.images.join(","),
             },
         });
     });

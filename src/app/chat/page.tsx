@@ -12,16 +12,18 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     addNewMessage,
     AppDispatch,
-    fetchNonExistingChat,
+    
     init,
     RootState,
     toggleSideBar,
 } from "./ChatState/store";
+
 import { useSession } from "next-auth/react";
 import { LoadingSpinner } from "~/components/ui/loading";
 import { X } from "lucide-react";
 import { Menu } from "antd";
 import { ChatSidebar } from "./ChatSidebar/ChatSidebar";
+import { fetchNonExistingChat } from "./ChatState/actions/chatActions";
 
 // Initialize Pusher
 Pusher.logToConsole = true;
@@ -78,14 +80,13 @@ export default function ChatPage() {
         // Initialize chats
         if (chats.data) {
             for (const key in chats.data.messages) {
-                chats.data.messages[key]?.sort((a,b) => {
-                    const timeA = new Date(a.createdAt ?? "").getTime()
-                    const timeB = new Date(b.createdAt ?? "").getTime()
-                    return timeA - timeB
-                  })
-              }
-              
-              
+                chats.data.messages[key]?.sort((a, b) => {
+                    const timeA = new Date(a.createdAt ?? "").getTime();
+                    const timeB = new Date(b.createdAt ?? "").getTime();
+                    return timeA - timeB;
+                });
+            }
+
             dispatch(init(chats.data));
         }
 
