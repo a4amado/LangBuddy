@@ -10,7 +10,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="en">
             <head>
-            <meta property="og:image" content="/langbuddy.webp" />
+            <meta property="og:image" content="langbuddy.webp" />
 
             </head>
             <body className={inter.className}>
