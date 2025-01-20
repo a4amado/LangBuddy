@@ -8,7 +8,7 @@ export const NewComment = ({ postId }: { postId: string; onAddComment: () => voi
     const createComment = api.comment.create.useMutation({
         onSuccess: () => {
             setComment("");
-            window.location.reload()
+            window.location.reload();
         },
     });
     return (
