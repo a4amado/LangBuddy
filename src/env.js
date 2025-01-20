@@ -13,6 +13,11 @@ export const env = createEnv({
         AUTH_GOOGLE_SECRET: z.string(),
         DATABASE_URL: z.string().url(),
         NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
+        
+        PUSHER_APP_ID: z.string(),
+        PUSHER_SECRET: z.string(),
+
+        UPLOADTHING_TOKEN: z.string(),
     },
 
     /**
@@ -22,6 +27,9 @@ export const env = createEnv({
      */
     client: {
         // NEXT_PUBLIC_CLIENTVAR: z.string(),
+        NEXT_PUBLIC_PUSHER_CLUSTER: z.string(),
+        NEXT_PUBLIC_PUSHER_KEY: z.string(),
+
     },
 
     /**
@@ -34,6 +42,13 @@ export const env = createEnv({
         AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET,
         DATABASE_URL: process.env.DATABASE_URL,
         NODE_ENV: process.env.NODE_ENV,
+        NEXT_PUBLIC_PUSHER_CLUSTER: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+        NEXT_PUBLIC_PUSHER_KEY:  process.env.NEXT_PUBLIC_PUSHER_KEY,
+        PUSHER_APP_ID:  process.env.PUSHER_APP_ID,
+        PUSHER_SECRET:  process.env.PUSHER_SECRET,
+
+        UPLOADTHING_TOKEN:  process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+
     },
     /**
      * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
