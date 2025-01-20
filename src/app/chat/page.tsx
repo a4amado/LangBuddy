@@ -76,7 +76,7 @@ export default function ChatPage() {
         return () => {
             channel.unbind_all();
             channel.unsubscribe();
-            // pusher.disconnect();
+            pusher.disconnect();
         };
     }, [isPlaying, userData?.user.id]);
 
