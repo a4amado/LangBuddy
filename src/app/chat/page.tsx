@@ -78,7 +78,7 @@ export default function ChatPage() {
             channel.unsubscribe();
             pusher.disconnect();
         };
-    }, [isPlaying, userData?.user.id]);
+    }, []);
 
     useEffect(() => {
         setLoading(true);
