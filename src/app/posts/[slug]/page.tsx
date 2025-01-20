@@ -151,7 +151,7 @@ export default function ViewPost() {
                             />
 
                             <PostContent title={post.title} content={post.content} />
-                            {post.images
+                            {post.images && post.images
                                 ?.split(",")
                                 .map((src) => <ImagePreview key={src} src={src} />)}
                             <PostActions

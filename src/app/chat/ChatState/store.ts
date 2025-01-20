@@ -59,7 +59,7 @@ const chatSlice = createSlice({
                     ) => {
                         const timeA = new Date(a.lastMessage?.createdAt ?? "").getTime();
                         const timeB = new Date(b.lastMessage?.createdAt ?? "").getTime();
-                        return timeA - timeB;
+                        return timeB  - timeA;
                     },
                 );
             }
