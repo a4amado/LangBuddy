@@ -71,14 +71,6 @@ export default function HomePage() {
     return (
         <PageWrapper>
             <div className="max-w-7xl h-full overflow-y-auto mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {/* Header */}
-                <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900">Find Language Partners</h1>
-                    <p className="mt-2 text-gray-600">
-                        Connect with native speakers and language learners worldwide
-                    </p>
-                </div>
-
                 {/* Filters */}
                 <div className="bg-white rounded-lg shadow p-6 mb-8">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
