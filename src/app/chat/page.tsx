@@ -13,6 +13,7 @@ import { ChatSidebar } from "./ChatSidebar/ChatSidebar";
 import { LoadingSpinner } from "~/components/ui/loading";
 import { addNewMessage, AppDispatch, init, RootState, toggleSideBar } from "./ChatState/store";
 import { fetchNonExistingChat } from "./ChatState/actions/chatActions";
+import { env } from "~/env";
 
 const PUSHER_KEY = "631df3862aa438e50863";
 const PUSHER_CLUSTER = "eu";
@@ -62,7 +63,7 @@ export default function ChatPage() {
     }, [loadingChatsStatus]);
 
     useEffect(() => {
-        const pusher = new Pusher(PUSHER_KEY, { cluster: PUSHER_CLUSTER });
+        const pusher = new Pusher(env.NEXT_PUBLIC_PUSHER_KEY, { cluster: env.NEXT_PUBLIC_PUSHER_CLUSTER });
         const channel = pusher.subscribe(userData?.user.id || "");
 
         channel.bind("new_msg", async (data: any) => {
