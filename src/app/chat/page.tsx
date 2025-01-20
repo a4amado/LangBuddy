@@ -66,6 +66,8 @@ export default function ChatPage() {
         const channel = pusher.subscribe(userData?.user.id || "");
 
         channel.bind("new_msg", async (data: any) => {
+            console.log("New Messege Recived!");
+            
             await playNotificationSound();
             await handleNewMessage(data);
         });
@@ -73,7 +75,7 @@ export default function ChatPage() {
         return () => {
             channel.unbind_all();
             channel.unsubscribe();
-            pusher.disconnect();
+            // pusher.disconnect();
         };
     }, [isPlaying, userData?.user.id]);
 
